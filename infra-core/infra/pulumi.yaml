@@ -1,0 +1,6 @@
+name: infra-core
+runtime: 
+  name: dotnet
+  options:
+    binary: ./infra-core
+description: Infrastructure for Booking 
