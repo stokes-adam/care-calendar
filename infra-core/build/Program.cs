@@ -31,12 +31,12 @@ Target(BuildContainer, () =>
   .UseWorkDir("/app")
   .Build();
     
- Run("docker", $"tag {ContainerName}:latest ghcr.io/adamizer25/care-calendar/{ContainerName}:{imageTag}");
+ Run("docker", $"tag {ContainerName}:latest ghcr.io/stokes-adam/care-calendar/{ContainerName}:{imageTag}");
 });
 
 Target(PushContainer, () =>
 {
- Run("docker", $"push ghcr.io/adamizer25/care-calendar/{ContainerName}:{imageTag}");
+ Run("docker", $"push ghcr.io/stokes-adam/care-calendar/{ContainerName}:{imageTag}");
 });
 
 Target("default", DependsOn(Clean, Publish, BuildContainer));
