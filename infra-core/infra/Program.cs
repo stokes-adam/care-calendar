@@ -35,10 +35,6 @@ return await Deployment.RunAsync(() =>
         Name = domain,
     });
 
-    return new Dictionary<string, object?>();
-});
-/*
-
 var certificate = new Certificate("care-calendar-certificate", new CertificateArgs
     {
         DomainName = domain,
@@ -149,4 +145,3 @@ var certificate = new Certificate("care-calendar-certificate", new CertificateAr
         ["providerRegion"] = provider.Region
     };
 });
-*/
