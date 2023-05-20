@@ -1,6 +1,0 @@
-name: infra-core
-runtime: 
-  name: dotnet
-  options:
-    binary: ./infra-core
-description: Core Infrastructure for Care Calendar 
