@@ -3,4 +3,4 @@ runtime:
   name: dotnet
   options:
     binary: ./infra-core
-description: Infrastructure for Booking 
+description: Core Infrastructure for Care Calendar 
