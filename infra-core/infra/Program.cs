@@ -66,7 +66,7 @@ var certificate = new Certificate("care-calendar-certificate", new CertificateAr
     var distribution = new Distribution("care-calendar-static-distribution", new DistributionArgs
     {
         Enabled = true,
-        Aliases = { static },
+        Aliases = new InputList<string> { static },
         Origins = new DistributionOriginArgs
         {
             DomainName = bucket.BucketRegionalDomainName,
