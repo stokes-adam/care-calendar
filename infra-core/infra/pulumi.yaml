@@ -1,4 +1,4 @@
-name: infra-core
+name: care-calendar-infra-core
 runtime: 
   name: dotnet
   options:
