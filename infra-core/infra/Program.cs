@@ -24,20 +24,22 @@ return await Deployment.RunAsync(() =>
     {
         Region = "us-east-1",
     });
-    
+
     var customResourceOptions = new CustomResourceOptions
     {
         Provider = provider
     };
-    
+
     var zone = new Zone("care-calendar-zone", new ZoneArgs
     {
         Name = domain,
     });
 
     return new Dictionary<string, object?>();
-    
-    var certificate = new Certificate("care-calendar-certificate", new CertificateArgs
+});
+/*
+
+var certificate = new Certificate("care-calendar-certificate", new CertificateArgs
     {
         DomainName = domain,
         SubjectAlternativeNames = wildcardSubdomain,
@@ -147,3 +149,4 @@ return await Deployment.RunAsync(() =>
         ["providerRegion"] = provider.Region
     };
 });
+*/
