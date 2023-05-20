@@ -18,7 +18,7 @@ Target(Clean, () =>
 
 Target(Publish, DependsOn(Clean), () =>
 {
- Run("dotnet", $"publish infra/infra.csproj -r linux-x64 -c Release -p:PublishSingleFile=true -o {tempPath}/app");
+ Run("dotnet", $"publish infra/infra-core.csproj -r linux-x64 -c Release -p:PublishSingleFile=true -o {tempPath}/app");
 });
 
 Target(BuildContainer, () =>
