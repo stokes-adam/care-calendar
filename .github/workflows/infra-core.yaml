@@ -68,7 +68,7 @@ jobs:
           -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
           -e AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN
           -e PULUMI_ACCESS_TOKEN=$PULUMI_ACCESS_TOKEN
-          ghcr.io/${{github.repository}}/infra-core:${{github.run_number}} bash -c "pulumi stack select stokes-adam/care-calendar-infra-core/default --non-interactive && pulumi preview"
+          ghcr.io/${{github.repository}}/infra-core:${{github.run_number}} bash -c "pulumi stack select stokes-adam/care/infra-core/default --non-interactive && pulumi preview"
 
   deploy:
     runs-on: ubuntu-latest
@@ -103,4 +103,4 @@ jobs:
           -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
           -e AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN
           -e PULUMI_ACCESS_TOKEN=$PULUMI_ACCESS_TOKEN
-          ghcr.io/${{github.repository}}/infra-core:${{github.run_number}} bash -c "pulumi stack select stokes-adam/care-calendar-infra-core/default --non-interactive && pulumi up -y --non-interactive"
+          ghcr.io/${{github.repository}}/infra-core:${{github.run_number}} bash -c "pulumi stack select stokes-adam/care-calendar/infra-core/default --non-interactive && pulumi up -y --non-interactive"
