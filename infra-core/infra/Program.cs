@@ -67,6 +67,7 @@ var certificate = new Certificate("care-calendar-certificate", new CertificateAr
     {
         Enabled = true,
         Aliases = { staticSubdomain },
+        DefaultRootObject = "index.html",
         Origins = new DistributionOriginArgs
         {
             DomainName = bucket.BucketRegionalDomainName,
@@ -126,9 +127,9 @@ var certificate = new Certificate("care-calendar-certificate", new CertificateAr
         Policy = policy
     }, customResourceOptions);
     
-    var mainDomainARecord = new Record("care-calendar-arecord", new RecordArgs
+    var staticSubdomainARecord = new Record("care-calendar-arecord", new RecordArgs
     {
-        Name = domain,
+        Name = staticSubdomain,
         Type = "A",
         ZoneId = zone.Id,
         Aliases = new RecordAliasArgs
