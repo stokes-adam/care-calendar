@@ -30,6 +30,7 @@ Target(build, () =>
         .From("pulumi/pulumi-dotnet:latest")
         .Environment("DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1")
         .Copy("/app", "/app")
+        .Copy("/app/wwwroot", "/app/wwwroot")
         .WorkingFolder("temp")
         .UseWorkDir("/app")
         .Build();

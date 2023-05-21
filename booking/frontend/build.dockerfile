@@ -19,6 +19,6 @@ COPY . ./repo/
 WORKDIR /repo/wwwroot
 
 RUN npm install
-RUN PUBLIC_URL=https://static.microcosmos.live npm run build
+RUN PUBLIC_URL=https://static.carecalendar.xyz npm run build
 
 WORKDIR /repo
