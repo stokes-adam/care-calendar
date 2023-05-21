@@ -1,0 +1,107 @@
+name: backend-infrastructure
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+    - .github/workflows/backend-infra**
+    - booking/backend/**
+  push:
+    branches:
+    - main
+    paths:
+    - .github/workflows/backend-infra**
+    - booking/backend/**
+
+env:
+  AWS_REGION: af-south-1
+  AWS_ROLE: ${{secrets.AWS_ROLE}}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Build
+      run: ./build.ps1
+      shell: pwsh
+      working-directory: booking/backend
+
+    - name: Push Container
+      run: ./build.ps1 push-container
+      shell: pwsh
+      working-directory: booking/backend
+
+  preview:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    needs: [build]
+    name: Preview
+    env:
+      PULUMI_ACCESS_TOKEN: ${{secrets.PULUMI_ACCESS_TOKEN}}
+    steps:
+      - name: Login to github container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{github.repository_owner}}
+          password: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Pull the deployment container
+        run: docker pull ghcr.io/${{github.repository}}/backend-infra:${{github.run_number}}
+
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: ${{env.AWS_REGION}}
+          role-to-assume: ${{env.AWS_ROLE}}
+          role-session-name: github-backend-infra-preview
+
+      - name: Pulumi preview
+        run:
+          docker run --rm
+          -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+          -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+          -e AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN
+          -e PULUMI_ACCESS_TOKEN=$PULUMI_ACCESS_TOKEN
+          ghcr.io/${{github.repository}}/backend-infra:${{github.run_number}} bash -c "pulumi stack select care-calendar/backend-infra/dev --non-interactive && pulumi preview"
+
+  deploy:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    if: github.event_name == 'push'
+    needs: [preview]
+    name: Deploy
+    env:
+      PULUMI_ACCESS_TOKEN: ${{secrets.PULUMI_ACCESS_TOKEN}}
+    steps:
+      - name: Login to github container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{github.repository_owner}}
+          password: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Pull the deployment container
+        run: docker pull ghcr.io/${{github.repository}}/backend-infra:${{github.run_number}}
+
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: ${{env.AWS_REGION}}
+          role-to-assume: ${{env.AWS_ROLE}}
+          role-session-name: github-backend-infra-deploy
+
+      - name: Pulumi deploy
+        run:
+          docker run --rm
+          -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+          -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+          -e AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN
+          -e PULUMI_ACCESS_TOKEN=$PULUMI_ACCESS_TOKEN
+          ghcr.io/${{github.repository}}/backend-infra:${{github.run_number}} bash -c "pulumi stack select care-calendar/backend-infra/dev --non-interactive && pulumi up -y --non-interactive"
+

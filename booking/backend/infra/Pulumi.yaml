@@ -1,0 +1,7 @@
+name: backend-infra
+runtime: 
+  name: dotnet
+  options:
+    binary: ./infra
+description: Backend for Care Calendar
+
