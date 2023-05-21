@@ -31,7 +31,7 @@ Target(build, () =>
         .Environment("DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1")
         .Copy("/app", "/app")
         .Copy("/app/wwwroot", "/app/wwwroot")
-        .WorkingFolder("temp")
+        .WorkingFolder(tempPath)
         .UseWorkDir("/app")
         .Build();
 
