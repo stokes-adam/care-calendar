@@ -1,19 +1,51 @@
 # Care Calendar
-Webapp to manage appointments
 
-## Concerns
-These are the focus points over what we're trying to achieve with this project.
-
-### Security
-Follow the GDPR, HIPAA and POPIA guidelines to ensure that the personal data of the users is protected.
-
-## Tech
-1. solidjs frontend (aws s3 bucket + cloudfront)
-2. c# api (aws ecs)
-3. postresql db (aws rds)
-4. ci/cd pipeline (gh actions)
-5. pulumi iac
+## Table of Contents
+[Introduction](https://github.com/stokes-adam/care-calendar#introduction)
+[Features](https://github.com/stokes-adam/care-calendar#features)
+[Technologies Used](https://github.com/stokes-adam/care-calendar#technologies-used)
+[Installation](https://github.com/stokes-adam/care-calendar#installation)
+[Usage](https://github.com/stokes-adam/care-calendar#usage)
+[APIs](https://github.com/stokes-adam/care-calendar#apis)
+[Testing](https://github.com/stokes-adam/care-calendar#testing)
+[License](https://github.com/stokes-adam/care-calendar#license)
 
 
-## Deployment
-There are 3 github actions workflows that are triggered on push to the main branch:
+## Introduction
+---
+Smaller institutions can book and manage appoints with clients which factors in conditions such as specialist availability and room availability.
+
+## Features
+---
+This is some stuff text to populate the readme.
+
+## Technologies Used
+---
+
+- Solid.js
+- ASP.NET
+- PostgreSQL
+- Pulumi iac
+- Amazon Web Services
+	- CloudFront to serve static content for multiple websites.
+- CI/CD pipeline (gh actions)
+
+## Installation
+---
+
+
+## Usage
+---
+
+
+## APIs
+---
+
+
+## Testing
+---
+
+
+## License
+---
+I don't know. :/
