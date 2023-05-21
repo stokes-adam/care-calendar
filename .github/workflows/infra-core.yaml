@@ -32,7 +32,7 @@ jobs:
       working-directory: infra-core
 
     - name: Push Container
-      run: ./build.ps1 push-Container
+      run: ./build.ps1 push-container
       shell: pwsh
       working-directory: infra-core
 

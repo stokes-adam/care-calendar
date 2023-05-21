@@ -1,5 +1,4 @@
-
-name: core-infrastructure
+name: frontend-infrastructure
 
 on:
   workflow_dispatch:
@@ -12,7 +11,7 @@ on:
     - main
     paths:
     - .github/workflows/frontend-infra**
-    - booking/fronten
+    - booking/frontend/**
 
 env:
   AWS_REGION: af-south-1
@@ -30,12 +29,12 @@ jobs:
     - name: Build
       run: ./build.ps1
       shell: pwsh
-      working-directory: booking/frontend-infra
+      working-directory: booking/frontend
 
     - name: Push Container
-      run: ./build.ps1 push-Container
+      run: ./build.ps1 push-container
       shell: pwsh
-      working-directory: booking/frontend-infra
+      working-directory: booking/frontend
 
   preview:
     runs-on: ubuntu-latest
