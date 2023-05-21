@@ -1,0 +1,6 @@
+name: frontend-infra
+runtime:
+  name: dotnet
+  options:
+      binary: ./infra
+description: The frontend infrastructure for Care Calendar

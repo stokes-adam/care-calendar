@@ -1,17 +1,17 @@
-name: core-infrastructure
+name: frontend-infrastructure
 
 on:
   workflow_dispatch:
   pull_request:
     paths:
-    - .github/workflows/infra-core**
-    - infra-core/**
+    - .github/workflows/frontend-infra**
+    - booking/frontend/**
   push:
     branches:
     - main
     paths:
-    - .github/workflows/infra-core**
-    - infra-core/**
+    - .github/workflows/frontend-infra**
+    - booking/frontend/**
 
 env:
   AWS_REGION: af-south-1
@@ -29,12 +29,12 @@ jobs:
     - name: Build
       run: ./build.ps1
       shell: pwsh
-      working-directory: infra-core
+      working-directory: booking/frontend
 
     - name: Push Container
       run: ./build.ps1 push-container
       shell: pwsh
-      working-directory: infra-core
+      working-directory: booking/frontend
 
   preview:
     runs-on: ubuntu-latest
@@ -52,14 +52,14 @@ jobs:
           password: ${{secrets.GITHUB_TOKEN}}
 
       - name: Pull the deployment container
-        run: docker pull ghcr.io/${{github.repository}}/infra-core:${{github.run_number}}
+        run: docker pull ghcr.io/${{github.repository}}/frontend-infra:${{github.run_number}}
 
       - name: Configure aws credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-region: ${{env.AWS_REGION}}
           role-to-assume: ${{env.AWS_ROLE}}
-          role-session-name: github-infra-core-preview
+          role-session-name: github-frontend-infra-preview
 
       - name: Pulumi preview
         run:
@@ -68,7 +68,7 @@ jobs:
           -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
           -e AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN
           -e PULUMI_ACCESS_TOKEN=$PULUMI_ACCESS_TOKEN
-          ghcr.io/${{github.repository}}/infra-core:${{github.run_number}} bash -c "pulumi stack select care-calendar/infra-core/default --non-interactive && pulumi preview"
+          ghcr.io/${{github.repository}}/frontend-infra:${{github.run_number}} bash -c "pulumi stack select care-calendar/frontend-infra/dev --non-interactive && pulumi preview"
 
   deploy:
     runs-on: ubuntu-latest
@@ -87,14 +87,14 @@ jobs:
           password: ${{secrets.GITHUB_TOKEN}}
 
       - name: Pull the deployment container
-        run: docker pull ghcr.io/${{github.repository}}/infra-core:${{github.run_number}}
+        run: docker pull ghcr.io/${{github.repository}}/frontend-infra:${{github.run_number}}
 
       - name: Configure aws credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-region: ${{env.AWS_REGION}}
           role-to-assume: ${{env.AWS_ROLE}}
-          role-session-name: github-infra-core-deploy
+          role-session-name: github-frontend-infra-deploy
 
       - name: Pulumi deploy
         run:
@@ -103,4 +103,4 @@ jobs:
           -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
           -e AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN
           -e PULUMI_ACCESS_TOKEN=$PULUMI_ACCESS_TOKEN
-          ghcr.io/${{github.repository}}/infra-core:${{github.run_number}} bash -c "pulumi stack select care-calendar/infra-core/default --non-interactive && pulumi up -y --non-interactive"
+          ghcr.io/${{github.repository}}/frontend-infra:${{github.run_number}} bash -c "pulumi stack select care-calendar/frontend-infra/dev --non-interactive && pulumi up -y --non-interactive"

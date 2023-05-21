@@ -1,8 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "build", "build\build.csproj", "{2917A4D0-56AC-4D79-BB79-0AB4C8B76CEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "infra", "infra\infra.csproj", "{931A7D5B-56B0-4440-91F3-CCC1066B2ECA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2917A4D0-56AC-4D79-BB79-0AB4C8B76CEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2917A4D0-56AC-4D79-BB79-0AB4C8B76CEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2917A4D0-56AC-4D79-BB79-0AB4C8B76CEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2917A4D0-56AC-4D79-BB79-0AB4C8B76CEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{931A7D5B-56B0-4440-91F3-CCC1066B2ECA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{931A7D5B-56B0-4440-91F3-CCC1066B2ECA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{931A7D5B-56B0-4440-91F3-CCC1066B2ECA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{931A7D5B-56B0-4440-91F3-CCC1066B2ECA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
