@@ -1,15 +1,14 @@
 # Care Calendar
 
 ## Table of Contents
-[Introduction](https://github.com/stokes-adam/care-calendar#introduction)
-[Features](https://github.com/stokes-adam/care-calendar#features)
-[Technologies Used](https://github.com/stokes-adam/care-calendar#technologies-used)
-[Installation](https://github.com/stokes-adam/care-calendar#installation)
-[Usage](https://github.com/stokes-adam/care-calendar#usage)
-[APIs](https://github.com/stokes-adam/care-calendar#apis)
-[Testing](https://github.com/stokes-adam/care-calendar#testing)
-[License](https://github.com/stokes-adam/care-calendar#license)
-
+- [Introduction](https://github.com/stokes-adam/care-calendar#introduction)
+- [Features](https://github.com/stokes-adam/care-calendar#features)
+- [Technologies Used](https://github.com/stokes-adam/care-calendar#technologies-used)
+- [Installation](https://github.com/stokes-adam/care-calendar#installation)
+- [Usage](https://github.com/stokes-adam/care-calendar#usage)
+- [APIs](https://github.com/stokes-adam/care-calendar#apis)
+- [Testing](https://github.com/stokes-adam/care-calendar#testing)
+- [License](https://github.com/stokes-adam/care-calendar#license)
 
 ## Introduction
 ---
@@ -21,7 +20,6 @@ This is some stuff text to populate the readme.
 
 ## Technologies Used
 ---
-
 - Solid.js
 - ASP.NET
 - PostgreSQL
