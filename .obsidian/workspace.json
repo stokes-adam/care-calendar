@@ -1,0 +1,159 @@
+{
+  "main": {
+    "id": "47c5330d0e12c4e5",
+    "type": "split",
+    "children": [
+      {
+        "id": "e233809be865ad80",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1480ef21c8572d55",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "README.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "0313b84f7c0c5465",
+    "type": "split",
+    "children": [
+      {
+        "id": "9549860f5ed06bef",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3e74f556d0bee6db",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "da134ab69ae04846",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "55f6a6029fe53700",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "4b123e9501f5e7d8",
+    "type": "split",
+    "children": [
+      {
+        "id": "ac86baf10315c3b1",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "807a3b7ed9c613e3",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "README.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "d4887bceb257bb17",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "README.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "c6ec41d90adbb35b",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "058fa082933e7941",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "README.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "obsidian-excalidraw-plugin:Create new drawing": false
+    }
+  },
+  "active": "1480ef21c8572d55",
+  "lastOpenFiles": [
+    "docs/architecture.excalidraw.md",
+    "docs/Solidjs.md",
+    "README.md",
+    "docs/solidjs-ideas.excalidraw.md",
+    "infra-core/README.md",
+    "booking/frontend/wwwroot/node_modules/@babel/helper-create-class-features-plugin/README.md"
+  ]
+}
