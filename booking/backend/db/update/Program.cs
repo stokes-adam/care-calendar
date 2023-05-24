@@ -1,9 +1,13 @@
 ﻿using System.Reflection;
 using DbUp;
 
-var connectionString =
-    args.FirstOrDefault()
-    ?? "Server=(local)\\SqlExpress; Database=MyApp; Trusted_connection=true";
+// switch statement
+var connectionString = args.Length switch
+{
+    1 => args.FirstOrDefault(),
+    > 1 => $"Server=localhost;Port=5432;Database=care_calendar;User Id={args[0]};Password={args[1]};",
+    _ => "Server=localhost;Port=5432;Database=care_calendar;User Id=postgres;Password=password;"
+};
 
 var upgrader =
     DeployChanges.To
