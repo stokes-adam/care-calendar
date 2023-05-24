@@ -13,7 +13,7 @@
 CREATE OR REPLACE FUNCTION appointment_audit_trigger() RETURNS TRIGGER AS $appointment_audit_trigger$
 BEGIN
     INSERT INTO appointment_audit(operation, timestamp, user_name, id, active, client_id, room_id, consultant_id)
-    VALUES (TG_OP, now(), current_user, NEW.id, NEW.active, NEW.client_id, NEW.room_id, NEW.consultant_id);
+    VALUES (substring(TG_OP FROM 1 FOR 1), now(), current_user, NEW.id, NEW.active, NEW.client_id, NEW.room_id, NEW.consultant_id);
     RETURN NEW;
 END;
 $appointment_audit_trigger$ LANGUAGE plpgsql;

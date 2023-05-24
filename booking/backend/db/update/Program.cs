@@ -2,17 +2,15 @@
 using DbUp;
 
 // switch statement
-var connectionString = args.Length switch
-{
-    1 => args.FirstOrDefault(),
-    > 1 => $"Server=localhost;Port=5432;Database=care_calendar;User Id={args[0]};Password={args[1]};",
-    _ => "Server=localhost;Port=5432;Database=care_calendar;User Id=postgres;Password=password;"
-};
+var connectionString =
+    args.FirstOrDefault()
+    ?? "Server=localhost;Port=5432;Database=postgres;User Id=postgres;Password=postgres;";
 
 var upgrader =
     DeployChanges.To
         .PostgresqlDatabase(connectionString)
         .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
+        .WithVariablesDisabled()
         .LogToConsole()
         .Build();
 
