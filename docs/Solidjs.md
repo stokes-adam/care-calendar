@@ -1,4 +1,4 @@
-This is very much in progress. I have plans to create two or three projects.
+This is a work-in-progress. I have plans to create two or three projects.
 
 1. ***carecalendar.xyz.***  This will be the barebones product page which goes through what the product is about, who should use the product and what the uses are.
    
