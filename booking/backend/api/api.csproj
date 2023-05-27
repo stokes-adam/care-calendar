@@ -10,4 +10,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="service\obj\project.assets.json" />
+    <_ContentIncludedByDefault Remove="service\obj\project.packagespec.json" />
+    <_ContentIncludedByDefault Remove="service\obj\service.csproj.nuget.dgspec.json" />
+  </ItemGroup>
+
 </Project>

@@ -35,13 +35,13 @@ return await Deployment.RunAsync(() =>
         Name = domain,
     });
 
-var certificate = new Certificate("care-calendar-certificate", new CertificateArgs
+    var certificate = new Certificate("care-calendar-certificate", new CertificateArgs
     {
         DomainName = domain,
         SubjectAlternativeNames = wildcardSubdomain,
         ValidationMethod = "DNS",
     }, customResourceOptions);
-    
+
     var certValidation = new Record("certValidation", new RecordArgs
     {
         Name = certificate.DomainValidationOptions.Apply(options => options[0].ResourceRecordName!),
