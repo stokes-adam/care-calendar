@@ -2,7 +2,7 @@
 
 namespace service;
 
-public interface IApiConfig
+public interface IDatabaseConfiguration
 {
     string ConnectionString { get; }
 }

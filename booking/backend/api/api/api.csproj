@@ -16,4 +16,9 @@
     <_ContentIncludedByDefault Remove="service\obj\service.csproj.nuget.dgspec.json" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\model\model.csproj" />
+    <ProjectReference Include="..\service\service.csproj" />
+  </ItemGroup>
+
 </Project>
