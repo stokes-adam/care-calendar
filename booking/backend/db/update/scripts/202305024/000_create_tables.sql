@@ -1,4 +1,5 @@
 ﻿CREATE EXTENSION "uuid-ossp";
+CREATE EXTENSION "pgcrypto";
 
 CREATE TABLE persons (
     id UUID NOT NULL DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -13,10 +14,10 @@ CREATE TABLE person_details (
     updated TIMESTAMP NOT NULL DEFAULT NOW(),
     deleted BOOLEAN NOT NULL DEFAULT FALSE,
     person_id UUID NOT NULL REFERENCES persons(id) ON DELETE CASCADE UNIQUE,
-    first_name VARCHAR(255) NOT NULL,
-    last_name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    phone VARCHAR(255) NOT NULL UNIQUE
+    encrypted_first_name TEXT NOT NULL,
+    encrypted_last_name TEXT NOT NULL,
+    encrypted_email TEXT NOT NULL UNIQUE,
+    encrypted_phone TEXT NOT NULL UNIQUE
 );
 CREATE INDEX idx_person_details_person_id ON person_details (person_id);
 CREATE INDEX idx_person_details_email ON person_details (email);

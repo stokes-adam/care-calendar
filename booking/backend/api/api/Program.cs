@@ -9,7 +9,11 @@ builder.Services.AddControllers();
 
 builder.Services
     .AddLogging()
-    .AddSingleton<IDatabaseConfiguration>(new PostgresDatabaseConfiguration(builder.Configuration["ConnectionString"]))
+    .AddSingleton<IDatabaseConfiguration>(
+        new PostgresDatabaseConfiguration(
+            builder.Configuration["ConnectionString"],
+            builder.Configuration["EncryptionKey"])
+    )
     .AddSingleton<IClientQueryService, PostgresClientQueryService>()
     .AddSingleton<IFirmQueryService, PostgresFirmQueryService>()
     .AddEndpointsApiExplorer()
