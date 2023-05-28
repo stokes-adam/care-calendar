@@ -7,19 +7,21 @@ namespace service;
 public class PostgresFirmQueryService : IFirmQueryService
 {
     private readonly ILogger<PostgresFirmQueryService> _logger;
-    private readonly IDatabaseConfiguration _databaseConfiguration;
+    private readonly string _connectionString;
+    private readonly string _encryptionKey;
     
     public PostgresFirmQueryService(ILogger<PostgresFirmQueryService> logger, IDatabaseConfiguration databaseConfiguration)
     {
         _logger = logger;
-        _databaseConfiguration = databaseConfiguration;
+        _connectionString = databaseConfiguration.ConnectionString;
+        _encryptionKey = databaseConfiguration.EncryptionKey;
     }
 
     public Task<IEnumerable<Firm>> GetForOwnerPersonWithEmail(string email)
     {
         try
         {
-            using var connection = new NpgsqlConnection(_databaseConfiguration.ConnectionString);
+            using var connection = new NpgsqlConnection(_connectionString);
             connection.Open();
 
             const string sql = @"
@@ -55,7 +57,7 @@ public class PostgresFirmQueryService : IFirmQueryService
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Error getting firs for person with email {Email}", email);
+            _logger.LogError(e, "Error getting firms for person with email {Email}", email);
             throw;
         }
     }

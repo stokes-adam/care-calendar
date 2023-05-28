@@ -11,39 +11,31 @@
 - [License](https://github.com/stokes-adam/care-calendar#license)
 
 ## Introduction
----
 Smaller institutions can book and manage appoints with clients which factors in conditions such as specialist availability and room availability.
 
 ## Features
----
 This is some stuff text to populate the readme.
 
 ## Technologies Used
----
 - Solid.js
 - ASP.NET
 - PostgreSQL
-- Pulumi iac
+- Pulumi IAC
 - Amazon Web Services
 	- CloudFront to serve static content for multiple websites.
-- CI/CD pipeline (gh actions)
+- CI/CD pipeline (github actions)
 
 ## Installation
----
 
 
 ## Usage
----
 
 
 ## APIs
----
 
 
 ## Testing
----
 
 
 ## License
----
 I don't know. :/
