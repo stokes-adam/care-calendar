@@ -3,7 +3,8 @@
 public record Client
 (
     Guid Id,
-    Guid PersonId,
-    Guid FirmId,
-    bool Active
+    string FirstName,
+    string LastName,
+    string Email,
+    string Phone
 );

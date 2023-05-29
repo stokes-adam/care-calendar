@@ -28,6 +28,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// cors: allow local or carecalendar.xyz
+app.UseCors(builder => builder
+    .WithOrigins(
+        "http://localhost:3000",
+        "https://carecalendar.xyz"
+    )
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+);
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

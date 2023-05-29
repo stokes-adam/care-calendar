@@ -1,0 +1,12 @@
+@import "./theme.scss";
+
+.App {
+  display: flex;
+  text-align: center;
+  color: var(--color-contrast);
+  background-color: var(--color-primary);
+}
+
+.contentWrapper {
+  padding: 2em;
+}

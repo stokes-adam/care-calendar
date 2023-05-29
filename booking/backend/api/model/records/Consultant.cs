@@ -3,5 +3,6 @@
 public record Consultant
 (
     Guid Id,
-    Guid PersonId
+    Guid PersonId,
+    Guid FirmId
 );

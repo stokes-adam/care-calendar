@@ -24,12 +24,17 @@ public class PostgresClientQueryService : IClientQueryService
             
             const string sql = @"
                 SELECT
-                    id,
-                    person_id,
-                    firm_id
-                FROM clients
+                    c.id,
+                    p.first_name,
+                    p.last_name,
+                    p.email,
+                    p.phone
+                FROM clients c
+                JOIN person_details p ON p.person_id = c.person_id
                 WHERE firm_id = @firmId
-                AND deleted = false";
+                AND c.deleted = false
+                AND p.deleted = false
+            ";
             
             using var command = new NpgsqlCommand(sql, connection);
             command.Parameters.AddWithValue("firmId", firmId);
@@ -41,9 +46,10 @@ public class PostgresClientQueryService : IClientQueryService
             {
                 clients.Add(new Client(
                     reader.GetGuid(0),
-                    reader.GetGuid(1),
-                    reader.GetGuid(2),
-                    reader.GetBoolean(3)
+                    reader.GetString(1),
+                    reader.GetString(2),
+                    reader.GetString(3),
+                    reader.GetString(4)
                 ));
             }
             
@@ -84,9 +90,10 @@ public class PostgresClientQueryService : IClientQueryService
             
             return Task.FromResult(new Client(
                 reader.GetGuid(0),
-                reader.GetGuid(1),
-                reader.GetGuid(2),
-                false
+                "",
+                "",
+                "",
+                ""
             ));
         }
         catch (Exception e)

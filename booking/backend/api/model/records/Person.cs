@@ -2,6 +2,5 @@
 
 public record Person
 (
-    Guid Id,
-    bool Active
+    Guid Id
 );
