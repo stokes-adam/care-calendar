@@ -1,4 +1,6 @@
-@import "./theme.scss";
+@import "./styles/theme.scss";
+@import "./styles/normalize.css";
+@import "./styles/skeleton.css";
 
 .App {
   display: flex;
@@ -8,5 +10,5 @@
 }
 
 .contentWrapper {
-  padding: 2em;
+  padding: 2em 3em;
 }

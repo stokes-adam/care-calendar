@@ -18,11 +18,11 @@ public class ClientController : ControllerBase
     }
    
     [HttpGet("firm/{firmId:guid}")]
-    public async Task<IActionResult> GetClientsForFirm(Guid firmId)
+    public async Task<IActionResult> GetClientsPersonalDetailsForFirm(Guid firmId)
     {
         try
         {
-            var clients = await _clientQueryService.GetClientsForFirm(firmId);
+            var clients = await _clientQueryService.GetClientsPersonalDetailsForFirm(firmId);
             
             return Ok(clients);
         }

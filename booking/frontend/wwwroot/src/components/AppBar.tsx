@@ -6,7 +6,7 @@ const AppBar = () => {
     <div class={styles.AppBar}>
       <div class={styles.profile}>
         <img></img>
-        <h3>jane@doe.com</h3>
+        <label>jane@doe.com</label>
         <div>signout</div>
       </div>
       <nav>

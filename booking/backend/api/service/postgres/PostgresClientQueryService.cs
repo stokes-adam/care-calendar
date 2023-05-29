@@ -15,7 +15,7 @@ public class PostgresClientQueryService : IClientQueryService
         _databaseConfiguration = databaseConfiguration;
     }
 
-    public Task<IEnumerable<Client>> GetClientsForFirm(Guid firmId)
+    public Task<IEnumerable<Client>> GetClientsPersonalDetailsForFirm(Guid firmId)
     {
         try
         {

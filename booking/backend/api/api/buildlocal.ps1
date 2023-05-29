@@ -1,17 +1,14 @@
-$ErrorActionPreference = "Stop"
+param (
+    [Parameter(Mandatory=$true)]
+    [string]$user,
 
-$tag="care-calendar-booking-api"
+    [Parameter(Mandatory=$true)]
+    [string]$password,
 
-docker rm -f $tag 2>&1 | Out-Null
+    [Parameter(Mandatory=$true)]
+    [string]$database
+)
 
-docker rmi $tag 2>&1 | Out-Null
+$connectionString = "Server=localhost;Port=5432;Database=$database;User Id=$user;Password=$password;"
 
-docker build `
-  -f build.dockerfile `
-  --tag $tag.
-
-docker run --rm --name $tag `
-  -v ${PWD}/artifacts:/repo/artifacts `
-  -p 5057:5057 `
-  $tag `
-  dotnet watch run --no-launch-profile
+dotnet run $connectionString
