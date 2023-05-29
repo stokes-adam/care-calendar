@@ -80,6 +80,9 @@ CREATE INDEX idx_appointments_room_id ON appointments (room_id);
 CREATE INDEX idx_appointments_consultant_id ON appointments (consultant_id);
 
 
+-- NOTE(adam)
+-- This doesn't get an audit table because it's not a core entity
+-- and it contains sensitive data
 CREATE TABLE appointment_details (
     id UUID NOT NULL DEFAULT uuid_generate_v4() PRIMARY KEY,
     appointment_id UUID NOT NULL REFERENCES appointments(id) ON DELETE CASCADE,
