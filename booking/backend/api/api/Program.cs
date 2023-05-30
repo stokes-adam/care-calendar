@@ -14,7 +14,6 @@ builder.Services
             builder.Configuration["ConnectionString"],
             builder.Configuration["EncryptionKey"])
     )
-    .AddSingleton<IClientQueryService, PostgresClientQueryService>()
     .AddSingleton<IFirmQueryService, PostgresFirmQueryService>()
     .AddEndpointsApiExplorer()
     .AddSwaggerGen();
@@ -27,6 +26,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(builder => builder
+    .WithOrigins(
+        "http://localhost:3000",
+        "https://carecalendar.xyz"
+    )
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+);
 
 app.UseHttpsRedirection();
 

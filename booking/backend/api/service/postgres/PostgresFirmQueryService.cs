@@ -32,10 +32,10 @@ public class PostgresFirmQueryService : IFirmQueryService
                 FROM person_details pd
                 JOIN persons p ON pd.person_id = p.id
                 JOIN firms f ON p.id = f.owner_person_id
-                WHERE pd.email = @email
-                AND f.deleted = false
-                AND p.deleted = false
-                AND pd.deleted = false
+                WHERE pd.encrypted_email = @email
+                AND f.deleted IS NOT NULL
+                AND p.deleted IS NOT NULL
+                AND pd.deleted IS NOT NULL
             ";
             
             using var command = new NpgsqlCommand(sql, connection);

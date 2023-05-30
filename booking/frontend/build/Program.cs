@@ -24,7 +24,7 @@ Target(publish, () =>
 
 Target(build, () =>
 {
-    Utils.CopyDirectory("wwwroot/dist", $"{tempPath}/wwwroot");
+    Utils.CopyDirectory("wwwroot/build", $"{tempPath}/wwwroot");
 
     Fd.DefineImage(containerName)
         .From("pulumi/pulumi-dotnet:latest")
