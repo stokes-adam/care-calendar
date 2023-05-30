@@ -1,28 +1,26 @@
-import { Component, createSignal, lazy } from "solid-js";
-import { Route, Routes } from "@solidjs/router";
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
 
-// lazy load pages
-const Home = lazy(() => import("./pages/Home"));
-const Clients = lazy(() => import("./pages/Clients"));
-
-import styles from "./App.module.scss";
-import AppBar from "./components/AppBar";
-
-const App: Component = () => {
-  const [theme] = createSignal("light");
-
+function App() {
   return (
-    <div class={styles.App + " " + theme()}>
-      <AppBar />
-      <div class={styles.contentWrapper}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<div>My about page woohoo</div>} />
-          <Route path="/clients" element={<Clients />} />
-        </Routes>
-      </div>
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.tsx</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
     </div>
   );
-};
+}
 
 export default App;
