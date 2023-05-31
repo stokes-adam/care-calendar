@@ -1,27 +1,28 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 
-// pages
-import Home from './pages/Home';
-import Clients from './pages/Clients';
-import Consultants from './pages/Consultants';
-import Rooms from './pages/Rooms';
+import appRoutes, { AppRoute } from './routes';
 
-// components
-import Layout from './components/Layout';
-import NotFound from './pages/NotFound';
+function recursiveRoutes(routes: AppRoute[]): JSX.Element[] {
+  return routes.map((route) => {
+    if (route.children) {
+      return (
+        <Route key={route.path} path={route.path} element={route.element}>
+          <Route key={route.path} index element={route.index} />
+          {recursiveRoutes(route.children)}
+        </Route>
+      );
+    }
+
+    return <Route key={route.path} path={route.path} element={route.element} />;
+  });
+}
 
 function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="clients" element={<Clients />} />
-          <Route path="consultants" element={<Consultants />} />
-          <Route path="rooms" element={<Rooms />} />
-          <Route path="*" element={<NotFound />} />
-        </Route>
+        {recursiveRoutes(appRoutes)}
       </Routes>
     </div>
   );
