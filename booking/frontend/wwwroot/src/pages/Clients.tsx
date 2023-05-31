@@ -1,4 +1,38 @@
-import Table from "../components/Table";
+import { Table } from "antd";
+
+const dataSource = [
+    {
+      key: '1',
+      name: 'Mike',
+      age: 32,
+      address: '10 Downing Street',
+    },
+    {
+      key: '2',
+      name: 'John',
+      age: 42,
+      address: '10 Downing Street',
+    },
+  ];
+  
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Age',
+      dataIndex: 'age',
+      key: 'age',
+    },
+    {
+      title: 'Address',
+      dataIndex: 'address',
+      key: 'address',
+    },
+  ];
+
 
 function Clients() {
     return (
@@ -14,7 +48,7 @@ function Clients() {
                 <input className="button-primary" type="button" value="button input" />
             </div>
             <div style={{ width: '50%', margin: '0 auto' }}>
-            <Table />
+            <Table columns={columns} dataSource={dataSource} />
             </div>
         </div>
     )
