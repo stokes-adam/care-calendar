@@ -56,7 +56,7 @@ public class PersonController : ControllerBase
         {
             var person = await _personQueryService.GetPerson(personId);
             
-            return Ok(person);
+            return CreatedAtAction(nameof(GetPerson), new { personId }, person);
         }
         catch (RecordNotFoundException<Person> e)
         {

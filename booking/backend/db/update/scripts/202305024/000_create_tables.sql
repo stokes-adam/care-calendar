@@ -27,7 +27,9 @@ CREATE TABLE firms (
     updated TIMESTAMP NOT NULL DEFAULT NOW(),
     deleted TIMESTAMP,
     owner_person_id UUID NOT NULL REFERENCES persons(id) ON DELETE CASCADE,
-    name VARCHAR(255) NOT NULL UNIQUE
+    name VARCHAR(255) NOT NULL UNIQUE,
+    address VARCHAR(255) NOT NULL,
+    city VARCHAR(255) NOT NULL
 );
 CREATE INDEX idx_firms_owner_person_id ON firms (owner_person_id);
 

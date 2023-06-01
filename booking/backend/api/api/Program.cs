@@ -16,6 +16,7 @@ builder.Services
     .AddSingleton<IDbConfiguration>(config)
     .AddSingleton<Encryption>()
     .AddSingleton<IFirmQueryService, PostgresFirmQueryService>()
+    .AddSingleton<IFirmCommandService, PostgresFirmCommandService>()
     .AddSingleton<IPersonQueryService, PostgresPersonQueryService>()
     .AddSingleton<IPersonCommandService, PostgresPersonCommandService>()
     .AddEndpointsApiExplorer()
