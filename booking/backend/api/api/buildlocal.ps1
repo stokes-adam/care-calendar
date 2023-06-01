@@ -6,9 +6,13 @@ param (
     [string]$password,
 
     [Parameter(Mandatory=$true)]
-    [string]$database
+    [string]$database,
+
+    [Parameter(Mandatory=$true)]
+    [string]$encryptionKey
 )
 
 $connectionString = "Server=localhost;Port=5432;Database=$database;User Id=$user;Password=$password;"
 
-dotnet run $connectionString
+dotnet build
+dotnet run --ConnectionString $connectionString --EncryptionKey $encryptionKey

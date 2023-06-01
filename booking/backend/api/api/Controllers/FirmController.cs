@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using model;
+using model.interfaces;
+using model.records;
 using service;
 
 namespace api.Controllers;
@@ -20,24 +22,6 @@ public class FirmController : ControllerBase
     [HttpGet("owner/{email}")]
     public async Task<IActionResult> GetFirmsForOwnerPersonWithEmail(string email)
     {
-        try
-        {
-            var firms = await _firmQueryService.GetForOwnerPersonWithEmail(email);
-            
-            return Ok(firms);
-        }
-        catch (AccessViolationException e)
-        {
-            return Unauthorized(e.Message);
-        }
-        catch (RecordNotFoundException<Firm> e)
-        {
-            return NotFound(e.Message);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Error getting firms for owner person with email {Email}", email);
-            return StatusCode(500);
-        }
+        return Ok();
     }
 }

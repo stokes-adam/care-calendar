@@ -1,8 +1,10 @@
-﻿using model;
+﻿using model.records;
 
-namespace service;
+namespace model.interfaces;
 
 public interface IPersonQueryService
 {
-    Task<IEnumerable<Person>> GetPersonalDetails(Guid personId);
+    Task<Person> GetPerson(Guid personId);
+    Task<IEnumerable<Person>> GetClientsForFirm(Guid firmId);
+    Task<IEnumerable<Person>> GetConsultantsForFirm(Guid firmId);
 }

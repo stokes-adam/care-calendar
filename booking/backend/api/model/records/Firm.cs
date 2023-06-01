@@ -1,4 +1,4 @@
-﻿namespace model;
+﻿namespace model.records;
 
 public record Firm
 (

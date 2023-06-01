@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using model;
+using model.records;
 using service;
 
 namespace api.Controllers;

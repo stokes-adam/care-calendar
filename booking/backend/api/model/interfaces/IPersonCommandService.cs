@@ -1,6 +1,6 @@
-﻿using model;
+﻿using model.records;
 
-namespace service;
+namespace model.interfaces;
 
 public interface IPersonCommandService
 {

@@ -1,64 +1,24 @@
-﻿using model;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
+using model;
+using model.interfaces;
+using model.records;
 using Npgsql;
 
-namespace service;
+namespace service.postgres;
 
 public class PostgresFirmQueryService : IFirmQueryService
 {
     private readonly ILogger<PostgresFirmQueryService> _logger;
     private readonly string _connectionString;
-    private readonly string _encryptionKey;
     
-    public PostgresFirmQueryService(ILogger<PostgresFirmQueryService> logger, IDatabaseConfiguration databaseConfiguration)
+    public PostgresFirmQueryService(ILogger<PostgresFirmQueryService> logger, IDbConfiguration dbDbConfiguration)
     {
         _logger = logger;
-        _connectionString = databaseConfiguration.ConnectionString;
-        _encryptionKey = databaseConfiguration.EncryptionKey;
+        _connectionString = dbDbConfiguration.ConnectionString;
     }
 
-    public Task<IEnumerable<Firm>> GetForOwnerPersonWithEmail(string email)
+    public Task<Firm> GetFirm(Guid firmId)
     {
-        try
-        {
-            using var connection = new NpgsqlConnection(_connectionString);
-            connection.Open();
-
-            const string sql = @"
-                SELECT 
-                    f.id,
-                    f.owner_person_id,
-                    f.name
-                FROM person_details pd
-                JOIN persons p ON pd.person_id = p.id
-                JOIN firms f ON p.id = f.owner_person_id
-                WHERE pd.encrypted_email = @email
-                AND f.deleted IS NOT NULL
-                AND p.deleted IS NOT NULL
-                AND pd.deleted IS NOT NULL
-            ";
-            
-            using var command = new NpgsqlCommand(sql, connection);
-            command.Parameters.AddWithValue("email", email);
-            
-            using var reader = command.ExecuteReader();
-            var clients = new List<Firm>();
-            
-            while (reader.Read())
-            {
-                clients.Add(new Firm(
-                    reader.GetGuid(0),
-                    reader.GetGuid(1),
-                    reader.GetString(2)
-                ));
-            }
-            
-            return Task.FromResult(clients.AsEnumerable());
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Error getting firms for person with email {Email}", email);
-            throw;
-        }
+        throw new NotImplementedException();
     }
 }

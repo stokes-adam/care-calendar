@@ -1,11 +1,13 @@
-﻿namespace service;
+﻿using model.interfaces;
 
-public class PostgresDatabaseConfiguration : IDatabaseConfiguration
+namespace service;
+
+public class DbConfiguration : IDbConfiguration
 {
     public string ConnectionString { get; }
     public string EncryptionKey { get; }
     
-    public PostgresDatabaseConfiguration(string connectionString, string encryptionKey)
+    public DbConfiguration(string connectionString, string encryptionKey)
     {
         ConnectionString = connectionString;
         EncryptionKey = encryptionKey;
