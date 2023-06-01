@@ -2,9 +2,7 @@
 
 public record Firm
 (
-    Guid Id,
+    Guid? Id,
     Guid OwnerPersonId,
-    string Name,
-    string Address,
-    string City
+    string Name
 );

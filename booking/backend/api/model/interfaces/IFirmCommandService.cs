@@ -1,10 +1,10 @@
-﻿using model.enums;
-using model.records;
+﻿using model.records;
 
 namespace model.interfaces;
 
 public interface IFirmCommandService
 {
     Task<Firm> CreateFirm(Firm firm);
-    Task AssignRoleToPerson(Guid firmId, Guid personId, Role role);
+    Task AssignFirmRoleToPerson(Guid firmId, Guid personId, string role);
+    Task RemoveFirmRoleFromPerson(Guid firmId, Guid personId, string role);
 }

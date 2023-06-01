@@ -42,7 +42,7 @@ CREATE TABLE roles (
     name VARCHAR(255) NOT NULL UNIQUE
 );
 
-CREATE TABLE firms_roles (
+CREATE TABLE firms_persons_roles (
     id UUID NOT NULL DEFAULT uuid_generate_v4() PRIMARY KEY,
     created TIMESTAMP NOT NULL DEFAULT NOW(),
     updated TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -52,7 +52,7 @@ CREATE TABLE firms_roles (
     role_id UUID NOT NULL REFERENCES roles(id) ON DELETE CASCADE,
     UNIQUE (firm_id, person_id, role_id)   
 );
-CREATE INDEX idx_firm_roles_firm_id ON firms_roles (firm_id);
+CREATE INDEX idx_firm_roles_firm_id ON firms_persons_roles (firm_id);
 
 CREATE TABLE rooms (
     id UUID NOT NULL DEFAULT uuid_generate_v4() PRIMARY KEY,

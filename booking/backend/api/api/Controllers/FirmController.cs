@@ -18,12 +18,32 @@ public class FirmController : ControllerBase
         ILogger<FirmController> logger,
         IFirmQueryService firmQueryService,
         IFirmCommandService firmCommandService)
-        
     {
         _logger = logger;
         _firmQueryService = firmQueryService;
         _firmCommandService = firmCommandService;
     }
+    
+    [HttpGet("{firmId:guid}")]
+    public async Task<IActionResult> GetFirm(Guid firmId)
+    {
+        try
+        {
+            var firm = await _firmQueryService.GetFirm(firmId);
+            
+            return CreatedAtAction(nameof(GetFirm), new { firmId }, firm);
+        }
+        catch (RecordNotFoundException<Firm> e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error getting firm");
+            return StatusCode(500);
+        }
+    }
+    
     
     [HttpPost]
     public async Task<IActionResult> CreateFirm([FromBody] Firm firm)
@@ -34,6 +54,10 @@ public class FirmController : ControllerBase
             
             return CreatedAtAction(nameof(CreateFirm), new { firmId = createdFirm.Id }, createdFirm);
         }
+        catch (AccessViolationException e)
+        {
+            return Unauthorized(e.Message);
+        }
         catch (Exception e)
         {
             _logger.LogError(e, "Error creating firm");
@@ -41,10 +65,47 @@ public class FirmController : ControllerBase
         }
     }
     
-    
-    [HttpGet("owner/{email}")]
-    public async Task<IActionResult> GetFirmsForOwnerPersonWithEmail(string email)
+    [HttpPost("{firmId:guid}/person/{personId:guid}/{role}")]
+    public async Task<IActionResult> AssignFirmRoleToPerson(Guid firmId, Guid personId, string role)
     {
-        return Ok();
+        try
+        {
+            await _firmCommandService.AssignFirmRoleToPerson(firmId, personId, role);
+            
+            return Ok();
+        }
+        catch (AccessViolationException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error adding person to firm");
+            return StatusCode(500);
+        }
+    }
+    
+    [HttpDelete("{firmId:guid}/person/{personId:guid}/{role}")]
+    public async Task<IActionResult> RemoveFirmRoleFromPerson(Guid firmId, Guid personId, string role)
+    {
+        try
+        {
+            await _firmCommandService.RemoveFirmRoleFromPerson(firmId, personId, role);
+            
+            return Ok();
+        }
+        catch (AccessViolationException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (RecordNotFoundException<Firm> e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error removing person from firm");
+            return StatusCode(500);
+        }
     }
 }
