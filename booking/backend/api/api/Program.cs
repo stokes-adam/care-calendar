@@ -1,20 +1,24 @@
+using model.interfaces;
 using service;
+using service.postgres;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Configuration.AddCommandLine(args);
+var connectionString = builder.Configuration["ConnectionString"] ?? throw new Exception("Missing connection string");
+var encryptionKey = builder.Configuration["EncryptionKey"] ?? throw new Exception("Missing encryption key");
+var config = new DbConfiguration(connectionString, encryptionKey);
 
 builder.Services.AddControllers();
 
 builder.Services
     .AddLogging()
-    .AddSingleton<IDatabaseConfiguration>(
-        new PostgresDatabaseConfiguration(
-            builder.Configuration["ConnectionString"],
-            builder.Configuration["EncryptionKey"])
-    )
+    .AddSingleton<IDbConfiguration>(config)
+    .AddSingleton<Encryption>()
     .AddSingleton<IFirmQueryService, PostgresFirmQueryService>()
+    .AddSingleton<IFirmCommandService, PostgresFirmCommandService>()
+    .AddSingleton<IPersonQueryService, PostgresPersonQueryService>()
+    .AddSingleton<IPersonCommandService, PostgresPersonCommandService>()
     .AddEndpointsApiExplorer()
     .AddSwaggerGen();
 

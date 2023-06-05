@@ -1,41 +1,31 @@
-# Care Calendar
+# Care Calendar - Full-Stack App
+![core](https://github.com/stokes-adam/care-calendar/actions/workflows/infra-core.yaml/badge.svg)
+![backend](https://github.com/stokes-adam/care-calendar/actions/workflows/backend-infra.yaml/badge.svg)
+![frontend](https://github.com/stokes-adam/care-calendar/actions/workflows/frontend-infra.yaml/badge.svg)
 
-## Table of Contents
-- [Introduction](https://github.com/stokes-adam/care-calendar#introduction)
-- [Features](https://github.com/stokes-adam/care-calendar#features)
-- [Technologies Used](https://github.com/stokes-adam/care-calendar#technologies-used)
-- [Installation](https://github.com/stokes-adam/care-calendar#installation)
-- [Usage](https://github.com/stokes-adam/care-calendar#usage)
-- [APIs](https://github.com/stokes-adam/care-calendar#apis)
-- [Testing](https://github.com/stokes-adam/care-calendar#testing)
-- [License](https://github.com/stokes-adam/care-calendar#license)
+
+## The Repository
+This repository is a personal project for Adam Stokes to build upon and apply lessons in a contained solution.
+You're looking at the high-level overview of the Care Calendar project.
+
+[Info about booking](booking/README.md)
+[Info about frontend for booking](booking/frontend/README.md)
+[Info about backend for booking](booking/backend/README.md)
 
 ## Introduction
 Smaller institutions can book and manage appoints with clients which factors in conditions such as specialist availability and room availability.
 
-## Features
-This is some stuff text to populate the readme.
-
 ## Technologies Used
-- Solid.js
+- React
 - ASP.NET
 - PostgreSQL
-- Pulumi IAC
-- Amazon Web Services
-	- CloudFront to serve static content for multiple websites.
-- CI/CD pipeline (github actions)
+- Pulumi
+- AWS
+- Docker
+- Github Actions
 
-## Installation
-
-
-## Usage
-
-
-## APIs
-
-
-## Testing
+## Setup
 
 
 ## License
-I don't know. :/
+Yes.

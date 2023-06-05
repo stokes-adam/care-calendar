@@ -1,8 +1,8 @@
-﻿namespace model;
+﻿namespace model.records;
 
 public record Firm
 (
-    Guid Id,
+    Guid? Id,
     Guid OwnerPersonId,
     string Name
 );

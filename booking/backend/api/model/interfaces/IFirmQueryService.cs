@@ -1,8 +1,8 @@
-﻿using model;
+﻿using model.records;
 
-namespace service;
+namespace model.interfaces;
 
 public interface IFirmQueryService
 {
-    Task<IEnumerable<Firm>> GetForOwnerPersonWithEmail(string email);
+    Task<Firm> GetFirm(Guid firmId);
 }
