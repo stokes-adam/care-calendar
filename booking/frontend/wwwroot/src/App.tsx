@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
+import { get } from './axios';
 import './App.css';
 
 import appRoutes, { AppRoute } from './routes';
@@ -19,6 +20,9 @@ function recursiveRoutes(routes: AppRoute[]): JSX.Element[] {
 }
 
 function App() {
+  const test = get("http://localhost:5057/firm/1234");
+  test.subscribe(console.log);
+
   return (
     <div className="App">
       <Routes>

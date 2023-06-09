@@ -2,11 +2,13 @@ using model.interfaces;
 using service;
 using service.postgres;
 
+Console.WriteLine("Starting");
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddCommandLine(args);
-var connectionString = builder.Configuration["ConnectionString"] ?? throw new Exception("Missing connection string");
-var encryptionKey = builder.Configuration["EncryptionKey"] ?? throw new Exception("Missing encryption key");
+var connectionString = Environment.GetEnvironmentVariable("ConnectionString") ?? throw new Exception("Missing connection string from environment");
+var encryptionKey = Environment.GetEnvironmentVariable("EncryptionKey") ?? throw new Exception("Missing encryption key from environment");
 var config = new DbConfiguration(connectionString, encryptionKey);
 
 builder.Services.AddControllers();
