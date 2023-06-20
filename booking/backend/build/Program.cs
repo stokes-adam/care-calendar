@@ -7,6 +7,7 @@ const string publish = "publish";
 const string buildContainer = "build-container";
 const string pushContainer = "push-container";
 const string containerName = "backend-infra";
+const string apiContainerName = "backend-api";
 
 var imageTag = Environment.GetEnvironmentVariable("GITHUB_RUN_NUMBER") ?? "GITHUB_RUN_NUMBER-NOT-SET";
 var tempPath = Path.Combine(Environment.CurrentDirectory, "temp");
@@ -19,6 +20,7 @@ Target(clean, () =>
 Target(publish, DependsOn(clean), () =>
 {
     Run("dotnet", $"publish infra/infra.csproj -r linux-x64 -c Release -p:PublishSingleFile=true -o {tempPath}/app");
+    Run("dotnet", $"publish api/api.csproj -r linux-x64 -c Release -p:PublishSingleFile=true -o {tempPath}/api");
 });
 
 Target(buildContainer, () =>
@@ -32,6 +34,16 @@ Target(buildContainer, () =>
         .Build();
     
     Run("docker", $"tag {containerName}:latest ghcr.io/stokes-adam/care-calendar/{containerName}:{imageTag}");
+    
+    Fd.DefineImage(apiContainerName)
+        .From("mcr.microsoft.com/dotnet/sdk:6.0")
+        .Environment("DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1")
+        .Copy("/api", "/api")
+        .WorkingFolder(tempPath)
+        .UseWorkDir("/api")
+        .Build();
+    
+    Run("docker", $"tag {apiContainerName}:latest ghcr.io/stokes-adam/care-calendar/{apiContainerName}:{imageTag}");
 });
 
 Target(pushContainer, () =>

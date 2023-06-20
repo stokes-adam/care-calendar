@@ -90,7 +90,7 @@ return await Deployment.RunAsync(() =>
         TaskRoleArn = taskRole.Arn,
         ContainerDefinitions = @"[{
         ""name"": ""hello-world"",
-        ""image"": ""ghcr.io/stokes-adam/backend-api:latest"",
+        ""image"": ""ghcr.io/stokes-adam/care-calendar/backend-api:latest"",
         ""portMappings"": [{
             ""containerPort"": 80,
             ""hostPort"": 80,
