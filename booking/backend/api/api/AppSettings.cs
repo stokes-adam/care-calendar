@@ -1,31 +1,55 @@
+using Amazon;
+using Amazon.SecretsManager;
+using Amazon.SecretsManager.Model;
+
 namespace api;
 
 public class AppSettings
 {
-   public static string GetConnectionString()
+   private readonly IAmazonSecretsManager _secretsManager = new AmazonSecretsManagerClient(RegionEndpoint.USEast1);
+   public string GetConnectionString()
    {
-      var connectionString = "TODO: Get from AWS Secrets Manager";
+      var connectionString = GetSecret("production/database/connectionString");
       
-      if (!string.IsNullOrEmpty(connectionString))
-      {
-         return connectionString;
-      }
-      
-      connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
-      if (string.IsNullOrEmpty(connectionString))
-      {
-         throw new Exception("CONNECTION_STRING environment variable not set");
-      }
-      return connectionString;
+      return !string.IsNullOrEmpty(connectionString)
+         ? connectionString
+         : GetSetting("CONNECTION_STRING");
    }
    
-   public static string GetEncryptionKey()
+   public string GetEncryptionKey()
    {
-      var encryptionKey = Environment.GetEnvironmentVariable("ENCRYPTION_KEY");
-      if (string.IsNullOrEmpty(encryptionKey))
+      return GetSetting("ENCRYPTION_KEY");
+   }
+
+   private string GetSetting(string settingName, string? defaultValue = null)
+   {
+      var settingValue = defaultValue ?? Environment.GetEnvironmentVariable(settingName);
+      
+      if (string.IsNullOrEmpty(settingValue))
       {
-         throw new Exception("ENCRYPTION_KEY environment variable not set");
+         throw new Exception($"{settingName} environment variable not set");
       }
-      return encryptionKey;
+      
+      return settingValue;
+   }
+
+   private string GetSecret(string secretName)
+   {
+      try
+      {
+         var request = new GetSecretValueRequest
+         {
+            SecretId = secretName,
+         };
+         
+         var response = _secretsManager.GetSecretValueAsync(request).Result;
+         
+         return response.SecretString;
+      }
+      catch (Exception e)
+      {
+         Console.WriteLine(e);
+         throw;
+      }
    }
 }

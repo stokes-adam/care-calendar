@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using model.interfaces;
 
 namespace service;
+
 public class Encryption
 {
     private readonly ILogger<Encryption> _logger;
@@ -12,7 +13,10 @@ public class Encryption
     public Encryption(ILogger<Encryption> logger, IDbConfiguration dbConfiguration)
     {
         _logger = logger;
-        _encryptionKey = Encoding.UTF8.GetBytes(dbConfiguration.EncryptionKey);
+        
+        using var sha = SHA256.Create();
+        var key = Encoding.UTF8.GetBytes(dbConfiguration.EncryptionKey);
+        _encryptionKey = sha.ComputeHash(key);
     }
 
     public string Encrypt(string value)
@@ -38,7 +42,7 @@ public class Encryption
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            _logger.LogError(e, "Failed to encrypt value");
             throw;
         }
     }
@@ -68,7 +72,7 @@ public class Encryption
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            _logger.LogError(e, "Failed to decrypt value");
             throw;
         }
     }

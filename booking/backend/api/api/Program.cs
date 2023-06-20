@@ -1,3 +1,4 @@
+using api;
 using model.interfaces;
 using service;
 using service.postgres;
@@ -7,8 +8,9 @@ Console.WriteLine("Starting");
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddCommandLine(args);
-var connectionString = Environment.GetEnvironmentVariable("ConnectionString") ?? throw new Exception("Missing connection string from environment");
-var encryptionKey = Environment.GetEnvironmentVariable("EncryptionKey") ?? throw new Exception("Missing encryption key from environment");
+var appSettings = new AppSettings();
+var connectionString = appSettings.GetConnectionString();
+var encryptionKey = appSettings.GetEncryptionKey();
 var config = new DbConfiguration(connectionString, encryptionKey);
 
 builder.Services.AddControllers();
@@ -38,8 +40,8 @@ app.UseCors(builder => builder
         "http://localhost:3000",
         "https://carecalendar.xyz"
     )
-    .AllowAnyMethod()
-    .AllowAnyHeader()
+    .WithMethods("GET", "POST", "PUT", "DELETE")
+    .WithHeaders("Content-Type")
 );
 
 app.UseHttpsRedirection();
