@@ -4,6 +4,10 @@ using Pulumi.Aws.Ec2.Inputs;
 using Pulumi.Aws.Ecs;
 using Pulumi.Aws.Ecs.Inputs;
 using Pulumi.Aws.Iam;
+using Rds = Pulumi.Aws.Rds;
+using Cluster = Pulumi.Aws.Ecs.Cluster;
+using SecurityGroup = Pulumi.Aws.Ec2.SecurityGroup;
+using SecurityGroupArgs = Pulumi.Aws.Ec2.SecurityGroupArgs;
 
 return await Deployment.RunAsync(() =>
 {

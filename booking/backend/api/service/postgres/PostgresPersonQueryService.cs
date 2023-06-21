@@ -11,18 +11,18 @@ public class PostgresPersonQueryService : IPersonQueryService
     private readonly string _connectionString;
     private readonly Encryption _encryption;
     
-    public PostgresPersonQueryService(ILogger<PostgresPersonQueryService> logger, IDbConfiguration dbDbConfiguration, Encryption encryption)
+    public PostgresPersonQueryService(ILogger<PostgresPersonQueryService> logger, IConfiguration configuration, Encryption encryption)
     {
         _logger = logger;
-        _connectionString = dbDbConfiguration.ConnectionString;
+        _connectionString = configuration.ConnectionString;
         _encryption = encryption;
     }
 
-    public Task<Person> GetPerson(Guid personId)
+    public async Task<Person> GetPerson(Guid personId)
     {
         try
         {
-            using var connection = new NpgsqlConnection(_connectionString);
+            await using var connection = new NpgsqlConnection(_connectionString);
             connection.Open();
             
             const string sql = @"
@@ -37,23 +37,25 @@ public class PostgresPersonQueryService : IPersonQueryService
                 AND pd.deleted IS NULL
             ";
             
-            using var command = new NpgsqlCommand(sql, connection);
+            await using var command = new NpgsqlCommand(sql, connection);
             command.Parameters.AddWithValue("personId", personId);
             
-            using var reader = command.ExecuteReader();
+            await using var reader = command.ExecuteReader();
             
             if (!reader.Read())
             {
                 throw new RecordNotFoundException<Person>(personId);
             }
-            
-            return Task.FromResult(new Person(
+
+            var result = new Person(
                 reader.GetGuid(0),
-                _encryption.Decrypt(reader.GetString(1)),
-                _encryption.Decrypt(reader.GetString(2)),
-                _encryption.Decrypt(reader.GetString(3)),
-                _encryption.Decrypt(reader.GetString(4))
-            ));
+                await _encryption.Decrypt(reader.GetString(1)),
+                await _encryption.Decrypt(reader.GetString(2)),
+                await _encryption.Decrypt(reader.GetString(3)),
+                await _encryption.Decrypt(reader.GetString(4))
+            );
+            
+            return result;
         }
         catch (Exception e)
         {
@@ -62,11 +64,11 @@ public class PostgresPersonQueryService : IPersonQueryService
         }
     }
     
-    public Task<IEnumerable<Person>> GetClientsForFirm(Guid firmId)
+    public async Task<IEnumerable<Person>> GetClientsForFirm(Guid firmId)
     {
         try
         {
-            using var connection = new NpgsqlConnection(_connectionString);
+            await using var connection = new NpgsqlConnection(_connectionString);
             connection.Open();
 
             const string sql = @"
@@ -83,24 +85,26 @@ public class PostgresPersonQueryService : IPersonQueryService
                 AND pd.deleted IS NULL
             ";
             
-            using var command = new NpgsqlCommand(sql, connection);
+            await using var command = new NpgsqlCommand(sql, connection);
             command.Parameters.AddWithValue("firmId", firmId);
             
-            using var reader = command.ExecuteReader();
+            await using var reader = command.ExecuteReader();
             var clients = new List<Person>();
             
             while (reader.Read())
             {
-                clients.Add(new Person(
+                var element = new Person(
                     reader.GetGuid(0),
-                    _encryption.Decrypt(reader.GetString(1)),
-                    _encryption.Decrypt(reader.GetString(2)),
-                    _encryption.Decrypt(reader.GetString(3)),
-                    _encryption.Decrypt(reader.GetString(4))
-                ));
+                    await _encryption.Decrypt(reader.GetString(1)),
+                    await _encryption.Decrypt(reader.GetString(2)),
+                    await _encryption.Decrypt(reader.GetString(3)),
+                    await _encryption.Decrypt(reader.GetString(4))
+                );
+                
+                clients.Add(element);
             }
-            
-            return Task.FromResult(clients.AsEnumerable());
+
+            return clients;
         }
         catch (Exception e)
         {
@@ -109,7 +113,7 @@ public class PostgresPersonQueryService : IPersonQueryService
         }
     }
 
-    public Task<IEnumerable<Person>> GetConsultantsForFirm(Guid firmId)
+    public async Task<IEnumerable<Person>> GetConsultantsForFirm(Guid firmId)
     {
         throw new NotImplementedException();
     }

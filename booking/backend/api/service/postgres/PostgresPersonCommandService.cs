@@ -11,10 +11,10 @@ public class PostgresPersonCommandService : IPersonCommandService
     private readonly string _connectionString;
     private readonly Encryption _encryption;
     
-    public PostgresPersonCommandService(ILogger<PostgresPersonCommandService> logger, IDbConfiguration dbDbConfiguration, Encryption encryption)
+    public PostgresPersonCommandService(ILogger<PostgresPersonCommandService> logger, IConfiguration configuration, Encryption encryption)
     {
         _logger = logger;
-        _connectionString = dbDbConfiguration.ConnectionString;
+        _connectionString = configuration.ConnectionString;
         _encryption = encryption;
     }
     

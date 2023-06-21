@@ -11,10 +11,10 @@ public class PostgresFirmQueryService : IFirmQueryService
     private readonly ILogger<PostgresFirmQueryService> _logger;
     private readonly string _connectionString;
 
-    public PostgresFirmQueryService(ILogger<PostgresFirmQueryService> logger, IDbConfiguration dbDbConfiguration)
+    public PostgresFirmQueryService(ILogger<PostgresFirmQueryService> logger, IConfiguration configuration)
     {
         _logger = logger;
-        _connectionString = dbDbConfiguration.ConnectionString;
+        _connectionString = configuration.ConnectionString;
     }
 
     public Task<Firm> GetFirm(Guid firmId)
