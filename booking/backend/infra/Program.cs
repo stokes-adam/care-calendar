@@ -1,4 +1,5 @@
 ﻿using Pulumi;
+using Pulumi.Aws;
 using Pulumi.Aws.Ec2;
 using Pulumi.Aws.Ec2.Inputs;
 using Pulumi.Aws.Ecs;
@@ -11,24 +12,37 @@ using SecurityGroupArgs = Pulumi.Aws.Ec2.SecurityGroupArgs;
 
 return await Deployment.RunAsync(() =>
 {
+    var coreStack = new StackReference("care-calendar/infra-core/default");
+    var providerRegion = coreStack.RequireOutput("providerRegion").Apply(region => region.ToString());
+    
+    var provider = new Provider("us-east-1", new ProviderArgs
+    {
+        Region = providerRegion,
+    });
+    
+    var customResourceOptions = new CustomResourceOptions {
+        Provider = provider,
+        DependsOn = coreStack
+    };
+    
     var vpc = new Vpc("vpc", new VpcArgs
     {
         CidrBlock = "10.0.0.0/16",
         EnableDnsHostnames = true,
         EnableDnsSupport = true,
-    });
+    }, customResourceOptions);
     
     var subnet1 = new Subnet("subnet1", new SubnetArgs
     {
         VpcId = vpc.Id,
         CidrBlock = "10.0.1.0/24",
-    });
+    }, customResourceOptions);
     
     var subnet2 = new Subnet("subnet2", new SubnetArgs
     {
         VpcId = vpc.Id,
         CidrBlock = "10.0.2.0/24",
-    });
+    }, customResourceOptions);
 
     var securityGroup = new SecurityGroup("securityGroup", new SecurityGroupArgs
     {
@@ -43,7 +57,7 @@ return await Deployment.RunAsync(() =>
                 CidrBlocks = {"0.0.0.0/0"},
             }
         }
-    });
+    }, customResourceOptions);
 
 
     // task role needs RDS permission
@@ -62,7 +76,7 @@ return await Deployment.RunAsync(() =>
             ""Action"": ""sts:AssumeRole""
         }]
     }"
-    });
+    }, customResourceOptions);
     
     var executionRole = new Role("executionRole", new RoleArgs
     {
@@ -77,9 +91,9 @@ return await Deployment.RunAsync(() =>
             ""Action"": ""sts:AssumeRole""
         }]
     }"
-    });
-    
-    var cluster = new Cluster("cluster");
+    }, customResourceOptions);
+
+    var cluster = new Cluster("cluster", new(), customResourceOptions);
     
     var taskDefinition = new TaskDefinition("taskDefinition", new TaskDefinitionArgs
     {
@@ -102,7 +116,7 @@ return await Deployment.RunAsync(() =>
         ""memory"": 512,
         ""essential"": true
     }]"
-    });
+    }, customResourceOptions);
 
     var service = new Service("service", new ServiceArgs
     {
@@ -116,5 +130,5 @@ return await Deployment.RunAsync(() =>
             Subnets = { subnet1.Id , subnet2.Id },
             SecurityGroups = { securityGroup.Id }
         }
-    });
+    }, customResourceOptions);
 });
