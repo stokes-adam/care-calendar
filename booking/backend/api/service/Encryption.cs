@@ -1,74 +1,66 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using Amazon.KeyManagementService;
+using Amazon.KeyManagementService.Model;
 using Microsoft.Extensions.Logging;
 using model.interfaces;
 
 namespace service;
+
 public class Encryption
 {
     private readonly ILogger<Encryption> _logger;
-    private readonly byte[] _encryptionKey;
+    private readonly AmazonKeyManagementServiceClient _kmsClient;
+    private readonly string _kmsKeyId;
 
-    public Encryption(ILogger<Encryption> logger, IDbConfiguration dbConfiguration)
+    public Encryption(ILogger<Encryption> logger, IConfiguration configuration)
     {
         _logger = logger;
-        _encryptionKey = Encoding.UTF8.GetBytes(dbConfiguration.EncryptionKey);
+        _kmsClient = new AmazonKeyManagementServiceClient(configuration.Region);
+        _kmsKeyId = configuration.EncryptionKeyId;
     }
 
-    public string Encrypt(string value)
+    public async Task<string> Encrypt(string value)
     {
         try
         {
-            using var aes = Aes.Create();
-            aes.Key = _encryptionKey;
-            aes.Mode = CipherMode.CBC;
-            aes.Padding = PaddingMode.PKCS7;
+            var encryptionRequest = new EncryptRequest
+            {
+                KeyId = _kmsKeyId,
+                Plaintext = new MemoryStream(Encoding.UTF8.GetBytes(value))
+            };
 
-            aes.GenerateIV();
-
-            var encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
-            var clearBytes = Encoding.UTF8.GetBytes(value);
-            var encrypted = encryptor.TransformFinalBlock(clearBytes, 0, clearBytes.Length);
-
-            var encryptedWithIv = aes.IV.Concat(encrypted).ToArray();
+            var encryptionResponse = await _kmsClient.EncryptAsync(encryptionRequest);
             
-            var base64 = Convert.ToBase64String(encryptedWithIv);
-
-            return base64;
+            var result = Convert.ToBase64String(encryptionResponse.CiphertextBlob.ToArray());
+            
+            return result;
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            _logger.LogError(e, "Failed to encrypt value");
             throw;
         }
     }
 
-    public string Decrypt(string value)
+    public async Task<string> Decrypt(string value)
     {
         try
         {
-            var fullCipher = Convert.FromBase64String(value);
-
-            var iv = new byte[16];
-            var cipherText = new byte[fullCipher.Length - 16];
-
-            Buffer.BlockCopy(fullCipher, 0, iv, 0, iv.Length);
-            Buffer.BlockCopy(fullCipher, iv.Length, cipherText, 0, cipherText.Length);
-
-            using var aes = Aes.Create();
-            aes.Key = _encryptionKey;
-            aes.IV = iv;
-            aes.Mode = CipherMode.CBC;
-            aes.Padding = PaddingMode.PKCS7;
-
-            var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-            var decrypted = decryptor.TransformFinalBlock(cipherText, 0, cipherText.Length);
-
-            return Encoding.UTF8.GetString(decrypted);
+            var decryptionRequest = new DecryptRequest
+            {
+                CiphertextBlob = new MemoryStream(Convert.FromBase64String(value))
+            };
+            
+            var decryptionResponse = await _kmsClient.DecryptAsync(decryptionRequest);
+            
+            var result = Encoding.UTF8.GetString(decryptionResponse.Plaintext.ToArray());
+            
+            return result;
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            _logger.LogError(e, "Failed to decrypt value");
             throw;
         }
     }

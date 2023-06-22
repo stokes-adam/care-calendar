@@ -10,10 +10,10 @@ public class PostgresFirmCommandService : IFirmCommandService
     private readonly ILogger<PostgresFirmCommandService> _logger;
     private readonly string _connectionString;
     
-    public PostgresFirmCommandService(ILogger<PostgresFirmCommandService> logger, IDbConfiguration dbDbConfiguration)
+    public PostgresFirmCommandService(ILogger<PostgresFirmCommandService> logger, IConfiguration configuration)
     {
         _logger = logger;
-        _connectionString = dbDbConfiguration.ConnectionString;
+        _connectionString = configuration.ConnectionString;
     }
 
     public Task<Firm> CreateFirm(Firm firm)
