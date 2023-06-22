@@ -24,7 +24,7 @@ Target(publish, DependsOn(clean), () =>
     
     // api
     Run("dotnet", "restore api/api/api.csproj");
-    Run("dotnet", $"publish api/api/api.csproj -r linux-x64 -c Release -p:PublishSingleFile=true -o {tempPath}/api");
+    Run("dotnet", $"publish api/api/api.csproj -r linux-x64 --self-contained true -c Release -p:PublishSingleFile=true -o {tempPath}/api");
 });
 
 Target(buildContainer, () =>
