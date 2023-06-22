@@ -22,14 +22,12 @@ return await Deployment.RunAsync(() =>
     {
         VpcId = vpc.Id,
         CidrBlock = "10.0.1.0/24",
-        AvailabilityZone = "us-east-1a",
     });
     
     var subnet2 = new Subnet("subnet2", new SubnetArgs
     {
         VpcId = vpc.Id,
         CidrBlock = "10.0.2.0/24",
-        AvailabilityZone = "us-east-1b",
     });
 
     var securityGroup = new SecurityGroup("securityGroup", new SecurityGroupArgs
