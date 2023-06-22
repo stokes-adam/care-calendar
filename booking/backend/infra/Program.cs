@@ -117,18 +117,4 @@ return await Deployment.RunAsync(() =>
         ""essential"": true
     }]"
     }, customResourceOptions);
-
-    var service = new Service("service", new ServiceArgs
-    {
-        Cluster = cluster.Arn,
-        DesiredCount = 1,
-        LaunchType = "FARGATE",
-        TaskDefinition = taskDefinition.Arn,
-        NetworkConfiguration = new ServiceNetworkConfigurationArgs
-        {
-            AssignPublicIp = true,
-            Subnets = { subnet1.Id , subnet2.Id },
-            SecurityGroups = { securityGroup.Id }
-        }
-    }, customResourceOptions);
 });
