@@ -122,7 +122,6 @@ return await Deployment.RunAsync(() =>
             ""hostPort"": 5057,
             ""protocol"": ""tcp""
         }],
-        ""
         ""cpu"": 256,
         ""memory"": 512,
         ""essential"": true
