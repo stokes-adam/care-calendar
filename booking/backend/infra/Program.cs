@@ -56,6 +56,16 @@ return await Deployment.RunAsync(() =>
                 ToPort = 80,
                 CidrBlocks = {"0.0.0.0/0"},
             }
+        },
+        Egress =
+        {
+            new SecurityGroupEgressArgs
+            {
+                Protocol = "-1",
+                FromPort = 0,
+                ToPort = 0,
+                CidrBlocks = {"0.0.0.0/0"}
+            }
         }
     }, customResourceOptions);
 
@@ -112,6 +122,7 @@ return await Deployment.RunAsync(() =>
             ""hostPort"": 5057,
             ""protocol"": ""tcp""
         }],
+        ""
         ""cpu"": 256,
         ""memory"": 512,
         ""essential"": true
