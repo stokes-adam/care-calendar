@@ -109,7 +109,7 @@ return await Deployment.RunAsync(() =>
         ""image"": ""ghcr.io/stokes-adam/care-calendar/backend-api:latest"",
         ""portMappings"": [{
             ""containerPort"": 5057,
-            ""hostPort"": 80,
+            ""hostPort"": 5057,
             ""protocol"": ""tcp""
         }],
         ""cpu"": 256,
