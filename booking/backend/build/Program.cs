@@ -42,10 +42,11 @@ Target(buildContainer, () =>
     // Build the API container
     Fd.DefineImage(apiContainerName)
         .From("mcr.microsoft.com/dotnet/aspnet:6.0")
-        .Environment("DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1")
+        .Environment("ASPNETCORE_URLS=http://+:5057")
         .Copy("/api", "/api")
         .WorkingFolder(tempPath)
         .UseWorkDir("/api")
+        .Entrypoint("dotnet", "api.dll")
         .Build();
     
     Run("docker", $"tag {apiContainerName}:latest ghcr.io/stokes-adam/care-calendar/{apiContainerName}:{imageTag}");
