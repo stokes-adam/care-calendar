@@ -5,6 +5,7 @@ using Pulumi.Aws.Ec2.Inputs;
 using Pulumi.Aws.Ecs;
 using Pulumi.Aws.Ecs.Inputs;
 using Pulumi.Aws.Iam;
+using Pulumi.Aws.SecretsManager;
 using Rds = Pulumi.Aws.Rds;
 using Cluster = Pulumi.Aws.Ecs.Cluster;
 using SecurityGroup = Pulumi.Aws.Ec2.SecurityGroup;
@@ -104,6 +105,15 @@ return await Deployment.RunAsync(() =>
     }, customResourceOptions);
 
     var cluster = new Cluster("cluster", new(), customResourceOptions);
+
+
+    var ghcrCredentials = Output.Create(GetSecret.InvokeAsync(new()
+    {
+        Name = "GHCR_Credentials"
+    }, new()
+    {
+        Provider = provider
+    }));
     
     var taskDefinition = new TaskDefinition("taskDefinition", new TaskDefinitionArgs
     {
@@ -124,7 +134,10 @@ return await Deployment.RunAsync(() =>
         }],
         ""cpu"": 256,
         ""memory"": 512,
-        ""essential"": true
+        ""essential"": true,
+        ""repositoryCredentials"": {
+            ""credentialsParameter"": """ + ghcrCredentials.Apply(c => c.Arn) + @"""
+        }
     }]"
     }, customResourceOptions);
 
