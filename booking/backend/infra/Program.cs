@@ -34,6 +34,30 @@ return await Deployment.RunAsync(() =>
         EnableDnsSupport = true,
     }, customResourceOptions);
     
+    var internetGateway = new InternetGateway("internetGateway", new InternetGatewayArgs
+    {
+    }, customResourceOptions);
+
+    var vpcInternetGatewayAttachment = new InternetGatewayAttachment("vpcInternetGatewayAttachment", new ()
+    {
+        VpcId = vpc.Id,
+        InternetGatewayId = internetGateway.Id,
+    }, customResourceOptions); 
+    
+    var routeTable = new RouteTable("routeTable", new RouteTableArgs
+    {
+        VpcId = vpc.Id,
+        Routes = 
+        {
+            new RouteTableRouteArgs
+            {
+                CidrBlock = "0.0.0.0/0",
+                GatewayId = internetGateway.Id,
+            }
+        },
+    }, customResourceOptions);
+ 
+    
     var subnet1 = new Subnet("subnet1", new SubnetArgs
     {
         VpcId = vpc.Id,
@@ -45,6 +69,18 @@ return await Deployment.RunAsync(() =>
         VpcId = vpc.Id,
         CidrBlock = "10.0.2.0/24",
     }, customResourceOptions);
+    
+    var routeTableAssociation1 = new RouteTableAssociation("routeTableAssociation1", new RouteTableAssociationArgs
+    {
+        SubnetId = subnet1.Id,
+        RouteTableId = routeTable.Id,
+    }, customResourceOptions);
+
+    var routeTableAssociation2 = new RouteTableAssociation("routeTableAssociation2", new RouteTableAssociationArgs
+    {
+        SubnetId = subnet2.Id,
+        RouteTableId = routeTable.Id,
+    }, customResourceOptions); 
 
     var securityGroup = new SecurityGroup("securityGroup", new SecurityGroupArgs
     {
