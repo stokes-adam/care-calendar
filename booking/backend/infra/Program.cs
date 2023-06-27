@@ -14,7 +14,7 @@ using SecurityGroupArgs = Pulumi.Aws.Ec2.SecurityGroupArgs;
 
 return await Deployment.RunAsync(() =>
 {
-    var runNumber = Environment.GetEnvironmentVariable("GITHUB_RUN_NUMBER") ?? "GITHUB_RUN_NUMBER-NOT-SET";
+    var runNumber = Environment.GetEnvironmentVariable("GITHUB_RUN_NUMBER") ?? "INFRA-GITHUB_RUN_NUMBER-NOT-SET";
     var coreStack = new StackReference("care-calendar/infra-core/default");
     var providerRegion = coreStack.RequireOutput("providerRegion").Apply(region => region.ToString());
     
