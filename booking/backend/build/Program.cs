@@ -23,7 +23,6 @@ Target(publish, DependsOn(clean), () =>
     Run("dotnet", $"publish infra/infra.csproj -r linux-x64 -c Release -p:PublishSingleFile=true -o {tempPath}/app");
     
     // api
-    Run("dotnet", "restore api/api/api.csproj");
     Run("dotnet", $"publish api/api/api.csproj -r linux-x64 --self-contained true -c Release -p:PublishSingleFile=true -o {tempPath}/api");
 });
 
@@ -32,6 +31,7 @@ Target(buildContainer, () =>
     Fd.DefineImage(containerName)
         .From("pulumi/pulumi-dotnet:latest")
         .Environment("DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1")
+        .Environment($"GITHUB_RUN_NUMBER={imageTag}")
         .Copy("/app", "/app")
         .WorkingFolder(tempPath)
         .UseWorkDir("/app")
