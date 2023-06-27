@@ -27,6 +27,14 @@ return await Deployment.RunAsync(() =>
         DependsOn = coreStack
     };
     
+    var ghcrCredentials = Output.Create(GetSecret.InvokeAsync(new()
+    {
+        Name = "GHCR_Credentials"
+    }, new()
+    {
+        Provider = provider
+    }));
+    
     var vpc = new Vpc("vpc", new VpcArgs
     {
         CidrBlock = "10.0.0.0/16",
@@ -128,7 +136,7 @@ return await Deployment.RunAsync(() =>
     
     var executionRole = new Role("executionRole", new RoleArgs
     {
-        AssumeRolePolicy = @"{
+        AssumeRolePolicy = ghcrCredentials.Apply(cred => @"{
         ""Version"": ""2008-10-17"",
         ""Statement"": [{
             ""Sid"": """",
@@ -137,20 +145,16 @@ return await Deployment.RunAsync(() =>
                 ""Service"": ""ecs-tasks.amazonaws.com""
             },
             ""Action"": ""sts:AssumeRole""
+        },
+        {
+            ""Effect"": ""Allow"",
+            ""Resource"": """ + cred.Arn + @""",
+            ""Action"": ""secretsmanager:GetSecretValue""
         }]
-    }"
+    }")
     }, customResourceOptions);
 
     var cluster = new Cluster("cluster", new(), customResourceOptions);
-
-
-    var ghcrCredentials = Output.Create(GetSecret.InvokeAsync(new()
-    {
-        Name = "GHCR_Credentials"
-    }, new()
-    {
-        Provider = provider
-    }));
     
     var taskDefinition = new TaskDefinition("taskDefinition", new TaskDefinitionArgs
     {
