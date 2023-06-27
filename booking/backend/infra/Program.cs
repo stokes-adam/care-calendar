@@ -14,6 +14,7 @@ using SecurityGroupArgs = Pulumi.Aws.Ec2.SecurityGroupArgs;
 
 return await Deployment.RunAsync(() =>
 {
+    var runNumber = Environment.GetEnvironmentVariable("GITHUB_RUN_NUMBER") ?? "GITHUB_RUN_NUMBER-NOT-SET";
     var coreStack = new StackReference("care-calendar/infra-core/default");
     var providerRegion = coreStack.RequireOutput("providerRegion").Apply(region => region.ToString());
     
@@ -179,18 +180,18 @@ return await Deployment.RunAsync(() =>
         RequiresCompatibilities = {"FARGATE"},
         ExecutionRoleArn = executionRole.Arn,
         TaskRoleArn = taskRole.Arn,
-        ContainerDefinitions = ghcrCredentials.Apply(c => @"[{
+        ContainerDefinitions = ghcrCredentials.Apply(c => $@"[{{
         ""name"": ""hello-world"",
-        ""image"": ""ghcr.io/stokes-adam/care-calendar/backend-api:latest"",
-        ""portMappings"": [{
+        ""image"": ""ghcr.io/stokes-adam/care-calendar/backend-api:{runNumber}"",
+        ""portMappings"": [{{
             ""containerPort"": 5057,
             ""hostPort"": 5057,
             ""protocol"": ""tcp""
-        }],
+        }}],
         ""cpu"": 256,
         ""memory"": 512,
         ""essential"": true,
-        ""repositoryCredentials"": {
+        ""repositoryCredentials"": {{
             ""credentialsParameter"": """ + c.Arn + @"""
         }
     }]"
