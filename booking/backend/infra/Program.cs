@@ -136,7 +136,7 @@ return await Deployment.RunAsync(() =>
     
     var executionRole = new Role("executionRole", new RoleArgs
     {
-        AssumeRolePolicy = ghcrCredentials.Apply(cred => @"{
+        AssumeRolePolicy = @"{
         ""Version"": ""2008-10-17"",
         ""Statement"": [{
             ""Sid"": """",
@@ -145,17 +145,31 @@ return await Deployment.RunAsync(() =>
                 ""Service"": ""ecs-tasks.amazonaws.com""
             },
             ""Action"": ""sts:AssumeRole""
-        },
-        {
-            ""Effect"": ""Allow"",
-            ""Resource"": """ + cred.Arn + @""",
-            ""Action"": ""secretsmanager:GetSecretValue""
         }]
-    }")
+    }"
     }, customResourceOptions);
+    
+    var executionRolePolicy = new RolePolicy("executionRolePolicy", new RolePolicyArgs
+    {
+        Role = executionRole.Name,
+        Policy = ghcrCredentials.Apply(cred => JsonSerializer.Serialize(new
+        {
+            Version = "2012-10-17",
+            Statement = new[]
+            {
+                new 
+                {
+                    Action = "secretsmanager:GetSecretValue",
+                    Resource = cred.Arn,
+                    Effect = "Allow"
+                }
+            }
+        })),
+    }, customResourceOptions); 
 
     var cluster = new Cluster("cluster", new(), customResourceOptions);
-    
+
+
     var taskDefinition = new TaskDefinition("taskDefinition", new TaskDefinitionArgs
     {
         Family = "hello-world",
