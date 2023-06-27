@@ -1,4 +1,5 @@
-﻿using Pulumi;
+﻿using System.Text.Json;
+using Pulumi;
 using Pulumi.Aws;
 using Pulumi.Aws.Ec2;
 using Pulumi.Aws.Ec2.Inputs;
@@ -124,7 +125,7 @@ return await Deployment.RunAsync(() =>
         RequiresCompatibilities = {"FARGATE"},
         ExecutionRoleArn = executionRole.Arn,
         TaskRoleArn = taskRole.Arn,
-        ContainerDefinitions = @"[{
+        ContainerDefinitions = ghcrCredentials.Apply(c => @"[{
         ""name"": ""hello-world"",
         ""image"": ""ghcr.io/stokes-adam/care-calendar/backend-api:latest"",
         ""portMappings"": [{
@@ -136,9 +137,10 @@ return await Deployment.RunAsync(() =>
         ""memory"": 512,
         ""essential"": true,
         ""repositoryCredentials"": {
-            ""credentialsParameter"": """ + ghcrCredentials.Apply(c => c.Arn) + @"""
+            ""credentialsParameter"": """ + c.Arn + @"""
         }
     }]"
+            )
     }, customResourceOptions);
 
     var service = new Service("service", new ServiceArgs
