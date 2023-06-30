@@ -144,7 +144,7 @@ return await Deployment.RunAsync(() =>
     var taskRolePolicy = new RolePolicy("taskRolePolicy", new RolePolicyArgs
     {
         Role = taskRole.Name,
-        Policy = JsonSerializer.Serialize(new
+        Policy = logGroup.Arn.Apply(arn => JsonSerializer.Serialize(new
         {
             Version = "2012-10-17",
             Statement = new[]
@@ -152,17 +152,17 @@ return await Deployment.RunAsync(() =>
                 new 
                 {
                     Action = "logs:CreateLogStream",
-                    Resource = logGroup.Arn,
+                    Resource = arn,
                     Effect = "Allow"
                 },
                 new 
                 {
                     Action = "logs:PutLogEvents",
-                    Resource = logGroup.Arn,
+                    Resource = arn,
                     Effect = "Allow"
                 }
             }
-        }),
+        })),
     }, customResourceOptions);
     
     var executionRole = new Role("executionRole", new RoleArgs
