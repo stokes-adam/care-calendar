@@ -9,14 +9,14 @@ Console.WriteLine("Starting");
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddCommandLine(args);
-var config = new Configuration();
+//var config = new Configuration();
 
 builder.Services.AddControllers();
 
 builder.Services
     .AddLogging()
-    .AddSingleton<IConfiguration>(config)
-    .AddSingleton<Encryption>()
+    //.AddSingleton<IConfiguration>(config)
+    //.AddSingleton<Encryption>()
     .AddSingleton<IFirmQueryService, PostgresFirmQueryService>()
     .AddSingleton<IFirmCommandService, PostgresFirmCommandService>()
     .AddSingleton<IPersonQueryService, PostgresPersonQueryService>()
