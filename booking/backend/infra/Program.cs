@@ -141,9 +141,43 @@ return await Deployment.RunAsync(() =>
     }"
     }, customResourceOptions);
     
-    var taskRolePolicy = new RolePolicy("taskRolePolicy", new RolePolicyArgs
+    var executionRole = new Role("executionRole", new RoleArgs
     {
-        Role = taskRole.Name,
+        AssumeRolePolicy = @"{
+        ""Version"": ""2008-10-17"",
+        ""Statement"": [{
+            ""Sid"": """",
+            ""Effect"": ""Allow"",
+            ""Principal"": {
+                ""Service"": ""ecs-tasks.amazonaws.com""
+            },
+            ""Action"": ""sts:AssumeRole""
+        }]
+    }"
+    }, customResourceOptions);
+    
+    var executionRoleSecretPolicy = new RolePolicy("executionRolePolicy", new RolePolicyArgs
+    {
+        Role = executionRole.Name,
+        Policy = ghcrCredentials.Apply(cred => JsonSerializer.Serialize(new
+        {
+            Version = "2012-10-17",
+            Statement = new[]
+            {
+                new 
+                {
+                    Action = "secretsmanager:GetSecretValue",
+                    Resource = cred.Arn,
+                    Effect = "Allow"
+                }
+            }
+        })),
+    }, customResourceOptions); 
+    
+    
+    var executionRoleLogPolicy = new RolePolicy("taskRolePolicy", new RolePolicyArgs
+    {
+        Role = executionRole.Name,
         Policy = logGroup.Arn.Apply(arn => JsonSerializer.Serialize(new
         {
             Version = "2012-10-17",
@@ -165,38 +199,6 @@ return await Deployment.RunAsync(() =>
         })),
     }, customResourceOptions);
     
-    var executionRole = new Role("executionRole", new RoleArgs
-    {
-        AssumeRolePolicy = @"{
-        ""Version"": ""2008-10-17"",
-        ""Statement"": [{
-            ""Sid"": """",
-            ""Effect"": ""Allow"",
-            ""Principal"": {
-                ""Service"": ""ecs-tasks.amazonaws.com""
-            },
-            ""Action"": ""sts:AssumeRole""
-        }]
-    }"
-    }, customResourceOptions);
-    
-    var executionRolePolicy = new RolePolicy("executionRolePolicy", new RolePolicyArgs
-    {
-        Role = executionRole.Name,
-        Policy = ghcrCredentials.Apply(cred => JsonSerializer.Serialize(new
-        {
-            Version = "2012-10-17",
-            Statement = new[]
-            {
-                new 
-                {
-                    Action = "secretsmanager:GetSecretValue",
-                    Resource = cred.Arn,
-                    Effect = "Allow"
-                }
-            }
-        })),
-    }, customResourceOptions); 
 
     var cluster = new Cluster("cluster", new(), customResourceOptions);
 
