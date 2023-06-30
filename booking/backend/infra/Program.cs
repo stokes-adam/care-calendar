@@ -186,13 +186,13 @@ return await Deployment.RunAsync(() =>
                 new 
                 {
                     Action = "logs:CreateLogStream",
-                    Resource = arn,
+                    Resource = arn + ":log-stream:*",
                     Effect = "Allow"
                 },
                 new 
                 {
                     Action = "logs:PutLogEvents",
-                    Resource = arn,
+                    Resource = arn + ":log-stream:*",
                     Effect = "Allow"
                 }
             }
