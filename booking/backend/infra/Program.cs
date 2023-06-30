@@ -115,6 +115,12 @@ return await Deployment.RunAsync(() =>
             }
         }
     }, customResourceOptions);
+    
+    var logGroup = new Pulumi.Aws.CloudWatch.LogGroup("logGroup", new Pulumi.Aws.CloudWatch.LogGroupArgs
+    {
+        Name = "care-calendar",
+        RetentionInDays = 7,
+    }, customResourceOptions);
 
 
     // task role needs RDS permission
@@ -133,6 +139,30 @@ return await Deployment.RunAsync(() =>
             ""Action"": ""sts:AssumeRole""
         }]
     }"
+    }, customResourceOptions);
+    
+    var taskRolePolicy = new RolePolicy("taskRolePolicy", new RolePolicyArgs
+    {
+        Role = taskRole.Name,
+        Policy = JsonSerializer.Serialize(new
+        {
+            Version = "2012-10-17",
+            Statement = new[]
+            {
+                new 
+                {
+                    Action = "logs:CreateLogStream",
+                    Resource = logGroup.Arn,
+                    Effect = "Allow"
+                },
+                new 
+                {
+                    Action = "logs:PutLogEvents",
+                    Resource = logGroup.Arn,
+                    Effect = "Allow"
+                }
+            }
+        }),
     }, customResourceOptions);
     
     var executionRole = new Role("executionRole", new RoleArgs
@@ -191,6 +221,14 @@ return await Deployment.RunAsync(() =>
         ""cpu"": 256,
         ""memory"": 512,
         ""essential"": true,
+        ""logConfiguration"": {{
+            ""logDriver"": ""awslogs"",
+            ""options"": {{
+                ""awslogs-group"": ""care-calendar"",
+                ""awslogs-region"": ""us-east-1"",
+                ""awslogs-stream-prefix"": ""hello-world""
+            }}
+        }},
         ""repositoryCredentials"": {{
             ""credentialsParameter"": """ + c.Arn + @"""
         }
