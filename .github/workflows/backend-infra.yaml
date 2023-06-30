@@ -55,7 +55,7 @@ jobs:
         run: docker pull ghcr.io/${{github.repository}}/backend-infra:${{github.run_number}}
 
       - name: Configure aws credentials
-        uses: aws-actions/configure-aws-credentials@v3
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-region: ${{env.AWS_REGION}}
           role-to-assume: ${{env.AWS_ROLE}}
