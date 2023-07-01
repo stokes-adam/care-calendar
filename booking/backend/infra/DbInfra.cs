@@ -23,6 +23,7 @@ public class DbInfra
 
         PostgresDb = new Instance("postgresDb", new InstanceArgs
         {
+            Identifier = "care-calendar",
             AllocatedStorage = 10,
             Engine = "postgres",
             EngineVersion = "13.3",
