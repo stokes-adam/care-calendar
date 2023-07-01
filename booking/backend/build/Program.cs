@@ -46,7 +46,7 @@ Target(buildContainer, () =>
         .Copy("/api", "/api")
         .WorkingFolder(tempPath)
         .UseWorkDir("/api")
-        .Entrypoint("dotnet", "api.dll")
+        .Entrypoint("api")
         .Build();
     
     Run("docker", $"tag {apiContainerName}:latest ghcr.io/stokes-adam/care-calendar/{apiContainerName}:{imageTag}");
