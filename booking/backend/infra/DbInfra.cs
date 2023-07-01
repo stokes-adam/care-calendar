@@ -12,6 +12,7 @@ public class DbInfra
     {
         var dbSubnet = new SubnetGroup("dbSubnet", new SubnetGroupArgs
         {
+            Name = "care-calendar-db-subnet",
             SubnetIds = { networkInfra.Subnet1Id, networkInfra.Subnet2Id },
         }, customResourceOptions);
         
