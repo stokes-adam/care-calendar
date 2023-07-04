@@ -46,14 +46,14 @@ public class NetworkInfra
         Subnet1 = new Subnet("subnet1", new SubnetArgs
         {
             VpcId = Vpc.Id,
-            CidrBlock = "10.0.1.0/24",
+            CidrBlock = "10.0.3.0/24",
             AvailabilityZone = "us-east-1a"
         }, customResourceOptions);
 
         Subnet2 = new Subnet("subnet2", new SubnetArgs
         {
             VpcId = Vpc.Id,
-            CidrBlock = "10.0.2.0/24",
+            CidrBlock = "10.0.4.0/24",
             AvailabilityZone = "us-east-1b"
         }, customResourceOptions);
 
