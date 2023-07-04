@@ -47,12 +47,14 @@ public class NetworkInfra
         {
             VpcId = Vpc.Id,
             CidrBlock = "10.0.1.0/24",
+            AvailabilityZone = "us-east-1a"
         }, customResourceOptions);
 
         Subnet2 = new Subnet("subnet2", new SubnetArgs
         {
             VpcId = Vpc.Id,
             CidrBlock = "10.0.2.0/24",
+            AvailabilityZone = "us-east-1b"
         }, customResourceOptions);
 
         var routeTableAssociation1 = new RouteTableAssociation("routeTableAssociation1", new RouteTableAssociationArgs
