@@ -23,12 +23,12 @@ public class DbInfra
 
         PostgresDb = new Instance("postgresDb", new InstanceArgs
         {
-            Identifier = "care-calendar",
+            Identifier = "carecalendar",
             AllocatedStorage = 10,
             Engine = "postgres",
             EngineVersion = "15.3",
             InstanceClass = "db.t3.micro",
-            Name = "care-calendar",
+            Name = "carecalendar",
             ManageMasterUserPassword = true,
             MasterUserSecretKmsKeyId = key.KeyId,
             SkipFinalSnapshot = true,
