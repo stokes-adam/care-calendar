@@ -26,7 +26,7 @@ public class DbInfra
             Identifier = "care-calendar",
             AllocatedStorage = 10,
             Engine = "postgres",
-            EngineVersion = "15.3-R2",
+            EngineVersion = "15.3",
             InstanceClass = "db.t3.micro",
             Name = "care-calendar",
             ManageMasterUserPassword = true,
