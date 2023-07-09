@@ -40,6 +40,7 @@ public class DbInfra
         var connectionStringParameter = new Pulumi.Aws.Ssm.Parameter("connectionString", new Pulumi.Aws.Ssm.ParameterArgs
         {
             Type = "SecureString",
+            Name = "care-calendar/db-connection-string",
             Value = ConnectionString,
             Description = "The connection string for the PostgreSQL database",
         }, customResourceOptions);

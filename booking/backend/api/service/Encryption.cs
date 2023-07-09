@@ -17,7 +17,8 @@ public class Encryption
     {
         _logger = logger;
         _kmsClient = new AmazonKeyManagementServiceClient(configuration.Region);
-        _kmsKeyId = configuration.EncryptionKeyId;
+        _kmsKeyId = Environment.GetEnvironmentVariable("EncryptionKeyId")
+                          ?? throw new Exception("EncryptionKeyId not set");
     }
 
     public async Task<string> Encrypt(string value)

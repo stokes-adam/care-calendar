@@ -8,6 +8,7 @@ const string buildContainer = "build-container";
 const string pushContainer = "push-container";
 const string containerName = "backend-infra";
 const string apiContainerName = "backend-api";
+const string dbUpdateLambdaContainerName = "db-update-lambda";
 
 var imageTag = Environment.GetEnvironmentVariable("GITHUB_RUN_NUMBER") ?? "GITHUB_RUN_NUMBER-NOT-SET";
 var tempPath = Path.Combine(Environment.CurrentDirectory, "temp");
@@ -24,6 +25,9 @@ Target(publish, DependsOn(clean), () =>
     
     // api
     Run("dotnet", $"publish api/api/api.csproj -r linux-x64 --self-contained true -c Release -p:PublishSingleFile=true -o {tempPath}/api");
+    
+    // db-update-lambda
+    Run("dotnet", $"publish db/update/update.csproj -r linux-x64 -c Release -p:PublishSingleFile=true -o {tempPath}/db-update-lambda");
 });
 
 Target(buildContainer, () =>
@@ -50,12 +54,24 @@ Target(buildContainer, () =>
         .Build();
     
     Run("docker", $"tag {apiContainerName}:latest ghcr.io/stokes-adam/care-calendar/{apiContainerName}:{imageTag}");
+    
+    // Build the db-update-lambda container
+    Fd.DefineImage(dbUpdateLambdaContainerName)
+        .From("mcr.microsoft.com/dotnet/runtime:6.0")
+        .Copy("/db-update-lambda", "/db-update-lambda")
+        .WorkingFolder(tempPath)
+        .UseWorkDir("/db-update-lambda")
+        .Entrypoint("./db-update-lambda")
+        .Build();
+    
+    Run("docker", $"tag {dbUpdateLambdaContainerName}:latest ghcr.io/stokes-adam/care-calendar/{dbUpdateLambdaContainerName}:{imageTag}");
 });
 
 Target(pushContainer, () =>
 {
     Run("docker", $"push ghcr.io/stokes-adam/care-calendar/{containerName}:{imageTag}");
     Run("docker", $"push ghcr.io/stokes-adam/care-calendar/{apiContainerName}:{imageTag}");
+    Run("docker", $"push ghcr.io/stokes-adam/care-calendar/{dbUpdateLambdaContainerName}:{imageTag}");
 });
 
 Target("default", DependsOn(clean, publish, buildContainer));
