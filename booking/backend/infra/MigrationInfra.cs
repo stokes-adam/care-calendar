@@ -25,7 +25,13 @@ public class MigrationInfra
             ]
             }" 
       }, customResourceOptions);
-
+      
+      var migrationRolePolicyAttachment = new RolePolicyAttachment("migrationRolePolicyAttachment", new RolePolicyAttachmentArgs
+      {
+          Role = migrationRole.Name,
+          PolicyArn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+      }, customResourceOptions);
+      
       var migrationLambda = new Function("migrationLambda", new FunctionArgs
       {
           Code = new FileArchive("./update"),
