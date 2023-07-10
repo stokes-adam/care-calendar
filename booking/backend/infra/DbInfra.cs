@@ -40,13 +40,13 @@ public class DbInfra
         var connectionStringParameter = new Pulumi.Aws.Ssm.Parameter("connectionString", new Pulumi.Aws.Ssm.ParameterArgs
         {
             Type = "SecureString",
-            Name = "care-calendar/db-connection-string",
+            Name = "/care-calendar/db-connection-string",
             Value = ConnectionString,
             Description = "The connection string for the PostgreSQL database",
         }, customResourceOptions);
     }
     
-    private Output<string> ConnectionString => Output.Tuple(PostgresDb.Endpoint, PostgresDb.Username, PostgresDb.Password).Apply(t =>
+    public Output<string> ConnectionString => Output.Tuple(PostgresDb.Endpoint, PostgresDb.Username, PostgresDb.Password).Apply(t =>
     {
         var (endpoint, username, password) = t;
         

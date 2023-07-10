@@ -32,7 +32,7 @@ public class Configuration : IConfiguration
         
         var request = new GetParameterRequest
         {
-            Name = "care-calendar/db-connection-string"
+            Name = "/care-calendar/db-connection-string"
         };
         
         var response = service.GetParameterAsync(request).Result;

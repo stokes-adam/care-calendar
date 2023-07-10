@@ -8,6 +8,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Amazon.Lambda.Core" Version="2.1.0" />
+      <PackageReference Include="Amazon.Lambda.Serialization.Json" Version="2.1.1" />
+      <PackageReference Include="AWSSDK.KeyManagementService" Version="3.7.104.3" />
+      <PackageReference Include="AWSSDK.SimpleSystemsManagement" Version="3.7.104.56" />
       <PackageReference Include="dbup-postgresql" Version="5.0.8" />
     </ItemGroup>
 
@@ -15,5 +19,5 @@
       <None Remove="scripts\*\*.sql" />
       <EmbeddedResource Include="scripts\*\*.sql" />
     </ItemGroup>
-
+    
 </Project>

@@ -29,31 +29,31 @@ public class ServiceInfra
         var taskRole = new Role("taskRole", new RoleArgs
         {
             AssumeRolePolicy = @"{
-        ""Version"": ""2008-10-17"",
-        ""Statement"": [{
-            ""Sid"": """",
-            ""Effect"": ""Allow"",
-            ""Principal"": {
-                ""Service"": ""ecs-tasks.amazonaws.com""
-            },
-            ""Action"": ""sts:AssumeRole""
-        }]
-    }"
+                ""Version"": ""2008-10-17"",
+                ""Statement"": [{
+                    ""Sid"": """",
+                    ""Effect"": ""Allow"",
+                    ""Principal"": {
+                        ""Service"": ""ecs-tasks.amazonaws.com""
+                    },
+                    ""Action"": ""sts:AssumeRole""
+                }]
+            }"
         }, customResourceOptions);
 
         var executionRole = new Role("executionRole", new RoleArgs
         {
             AssumeRolePolicy = @"{
-        ""Version"": ""2008-10-17"",
-        ""Statement"": [{
-            ""Sid"": """",
-            ""Effect"": ""Allow"",
-            ""Principal"": {
-                ""Service"": ""ecs-tasks.amazonaws.com""
-            },
-            ""Action"": ""sts:AssumeRole""
-        }]
-    }"
+                ""Version"": ""2008-10-17"",
+                ""Statement"": [{
+                    ""Sid"": """",
+                    ""Effect"": ""Allow"",
+                    ""Principal"": {
+                        ""Service"": ""ecs-tasks.amazonaws.com""
+                    },
+                    ""Action"": ""sts:AssumeRole""
+                }]
+            }"
         }, customResourceOptions);
 
         var executionRoleSecretPolicy = new RolePolicy("executionRolePolicy", new RolePolicyArgs
