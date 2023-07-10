@@ -20,4 +20,5 @@ return await Deployment.RunAsync(() =>
     var networkInfra = new NetworkInfra(customResourceOptions);
     var dbInfra = new DbInfra(networkInfra, customResourceOptions);
     var serviceInfra = new ServiceInfra(networkInfra, customResourceOptions);
+    var migrationInfra = new MigrationInfra(dbInfra, networkInfra, customResourceOptions);
 });
