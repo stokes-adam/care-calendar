@@ -34,7 +34,6 @@ public class MigrationInfra
           Runtime = Runtime.Dotnet6,
           VpcConfig =  new FunctionVpcConfigArgs
           {
-              VpcId = networkInfra.VpcId,
               SubnetIds = { networkInfra.Subnet1Id, networkInfra.Subnet2Id },
               SecurityGroupIds = { networkInfra.SecurityGroupId }
           },
