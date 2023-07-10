@@ -1,6 +1,4 @@
 ﻿using Pulumi;
-using Pulumi.Aws.Ec2.Inputs;
-using Pulumi.Aws.Ecs;
 using Pulumi.Aws.Rds;
 
 namespace infra;
@@ -50,6 +48,6 @@ public class DbInfra
     {
         var (endpoint, username, password) = t;
         
-        return $"postgresql://{username}:{password}@{endpoint}/care-calendar";
+        return $"Server={endpoint};Port=5432;Database=carecalendar;User Id={username};Password={password};";
     });
 }
