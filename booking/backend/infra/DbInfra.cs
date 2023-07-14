@@ -1,5 +1,7 @@
 ﻿using Pulumi;
+using Pulumi.Random;
 using Pulumi.Aws.Rds;
+using Pulumi.Aws.SecretsManager;
 
 namespace infra;
 
@@ -14,9 +16,10 @@ public class DbInfra
             SubnetIds = { networkInfra.Subnet1Id, networkInfra.Subnet2Id },
         }, customResourceOptions);
         
-        var key = new Pulumi.Aws.Kms.Key("key", new Pulumi.Aws.Kms.KeyArgs
+        var password = new RandomPassword("password", new RandomPasswordArgs
         {
-            Description = "Key for encrypting RDS data",
+            Length = 16,
+            Special = true,
         }, customResourceOptions);
 
         PostgresDb = new Instance("postgresDb", new InstanceArgs
@@ -27,10 +30,9 @@ public class DbInfra
             EngineVersion = "15.3",
             InstanceClass = "db.t3.micro",
             Name = "carecalendar",
-            ManageMasterUserPassword = true,
-            MasterUserSecretKmsKeyId = key.KeyId,
-            SkipFinalSnapshot = true,
             Username = "postgres",
+            Password = password.Result,
+            SkipFinalSnapshot = true,
             VpcSecurityGroupIds = { networkInfra.SecurityGroupId },
             DbSubnetGroupName = dbSubnet.Name,
         }, customResourceOptions);
