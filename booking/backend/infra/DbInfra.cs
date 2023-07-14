@@ -31,7 +31,7 @@ public class DbInfra
             InstanceClass = "db.t3.micro",
             Name = "carecalendar",
             Username = "postgres",
-            Password = password.Result,
+            Password = "password.Result",
             SkipFinalSnapshot = true,
             VpcSecurityGroupIds = { networkInfra.SecurityGroupId },
             DbSubnetGroupName = dbSubnet.Name,
