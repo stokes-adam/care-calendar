@@ -32,8 +32,6 @@ Target(buildContainer, () =>
         .Environment($"GITHUB_RUN_NUMBER={imageTag}")
         .Copy("/app", "/app")
         .WorkingFolder(tempPath)
-        .UseWorkDir("/app/infra")
-        .Run("dotnet add package Pulumi.Random")
         .UseWorkDir("/app")
         .Build();
     
