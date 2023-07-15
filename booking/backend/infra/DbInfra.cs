@@ -26,21 +26,24 @@ public class DbInfra
             SecretId = "prod/CareCalendar/postgres",
         }, new InvokeOptions { Provider = customResourceOptions.Provider }));
 
-        var getSecret = new Func<string, Output<string>>(propertyName =>
+        var getSecretString = new Func<string, Output<string>>(propertyName =>
             secret.Apply(s => JsonDocument.Parse(s.SecretString).RootElement.GetProperty(propertyName).GetString())!);
+        
+        var getSecretInt = new Func<string, Output<int>>(propertyName =>
+            secret.Apply(s => JsonDocument.Parse(s.SecretString).RootElement.GetProperty(propertyName).GetInt32())!);
         
         PostgresDb = new Instance("postgresDb", new InstanceArgs
         {
-            Identifier = getSecret("dbInstanceIdentifier"),
+            Identifier = getSecretString("dbInstanceIdentifier"),
             AllocatedStorage = 10,
-            Engine = getSecret("engine"),
+            Engine = getSecretString("engine"),
             EngineVersion = "15.3",
             InstanceClass = "db.t3.micro",
-            Name = getSecret("dbname"),
-            DbName = getSecret("dbname"),
-            Username = getSecret("username"),
-            Password = getSecret("password"),
-            Port = getSecret("port").Apply(int.Parse),
+            Name = getSecretString("dbname"),
+            DbName = getSecretString("dbname"),
+            Username = getSecretString("username"),
+            Password = getSecretString("password"),
+            Port = getSecretInt("port"),
             SkipFinalSnapshot = true,
             VpcSecurityGroupIds = { networkInfra.SecurityGroupId },
             DbSubnetGroupName = dbSubnet.Name,
