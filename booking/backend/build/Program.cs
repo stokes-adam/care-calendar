@@ -30,7 +30,7 @@ Target(buildContainer, () =>
         .From("pulumi/pulumi-dotnet:latest")
         .Environment("DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1")
         .Environment($"GITHUB_RUN_NUMBER={imageTag}")
-        .Run("pulumi plugin install random")
+        .Run("dotnet add package Pulumi.Random")
         .Copy("/app", "/app")
         .WorkingFolder(tempPath)
         .UseWorkDir("/app")
