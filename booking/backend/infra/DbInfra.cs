@@ -39,7 +39,6 @@ public class DbInfra
             Engine = getSecretString("engine"),
             EngineVersion = "15.3",
             InstanceClass = "db.t3.micro",
-            Name = getSecretString("dbname"),
             DbName = getSecretString("dbname"),
             Username = getSecretString("username"),
             Password = getSecretString("password"),
