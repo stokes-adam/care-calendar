@@ -1,5 +1,5 @@
-﻿using Pulumi;
-using Pulumi.Random;
+﻿using System.Text.Json;
+using Pulumi;
 using Pulumi.Aws.Rds;
 using Pulumi.Aws.SecretsManager;
 
@@ -16,11 +16,18 @@ public class DbInfra
             SubnetIds = { networkInfra.Subnet1Id, networkInfra.Subnet2Id },
         }, customResourceOptions);
         
-        var password = new RandomPassword("password", new RandomPasswordArgs
+        var key = new Pulumi.Aws.Kms.Key("key", new Pulumi.Aws.Kms.KeyArgs
         {
-            Length = 16,
-            Special = true,
+            Description = "Key for encrypting RDS data",
         }, customResourceOptions);
+        
+        var secret = Output.Create(GetSecretVersion.InvokeAsync(new GetSecretVersionArgs
+        {
+            SecretId = "prod/CareCalendar/postgres",
+        }, new InvokeOptions { Provider = customResourceOptions.Provider }));
+        
+        var username = secret.Apply(s => JsonDocument.Parse(s.SecretString).RootElement.GetProperty("username").GetString());
+        var password = secret.Apply(s => JsonDocument.Parse(s.SecretString).RootElement.GetProperty("password").GetString());
 
         PostgresDb = new Instance("postgresDb", new InstanceArgs
         {
@@ -30,8 +37,8 @@ public class DbInfra
             EngineVersion = "15.3",
             InstanceClass = "db.t3.micro",
             Name = "carecalendar",
-            Username = "postgres",
-            Password = password.Result,
+            Username = username!,
+            Password = password!,
             SkipFinalSnapshot = true,
             VpcSecurityGroupIds = { networkInfra.SecurityGroupId },
             DbSubnetGroupName = dbSubnet.Name,
