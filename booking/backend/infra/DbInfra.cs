@@ -52,12 +52,12 @@ public class DbInfra
             Description = "The connection string for the PostgreSQL database",
         }, customResourceOptions); */
     }
-    
-    public Output<string> ConnectionString => Output.Tuple(PostgresDb.Endpoint, PostgresDb.Username, PostgresDb.Password).Apply(t =>
+
+    public Output<string> ConnectionString =>
+        Output.Create(""); /*Output.Tuple(PostgresDb.Endpoint, PostgresDb.Username, PostgresDb.Password).Apply(t =>
     {
         var (endpoint, username, password) = t;
 
-        return "";
         return $"Server={endpoint};Port=5432;Database=carecalendar;User Id={username};Password={password};";
-    }); 
+    });  */
 }
