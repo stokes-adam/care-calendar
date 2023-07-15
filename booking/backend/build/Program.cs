@@ -33,7 +33,7 @@ Target(buildContainer, () =>
         .Copy("/app", "/app")
         .WorkingFolder(tempPath)
         .UseWorkDir("/app")
-        .Shell("pulumi plugin install resource random")
+        .Run("pulumi", "plugin install resource random")
         .Build();
     
     Run("docker", $"tag {containerName}:latest ghcr.io/stokes-adam/care-calendar/{containerName}:{imageTag}");
