@@ -29,7 +29,7 @@ public class DbInfra
         var username = secret.Apply(s => JsonDocument.Parse(s.SecretString).RootElement.GetProperty("username").GetString());
         var password = secret.Apply(s => JsonDocument.Parse(s.SecretString).RootElement.GetProperty("password").GetString());
 
-        PostgresDb = new Instance("postgresDb", new InstanceArgs
+        /* PostgresDb = new Instance("postgresDb", new InstanceArgs
         {
             Identifier = "carecalendar",
             AllocatedStorage = 10,
@@ -42,21 +42,22 @@ public class DbInfra
             SkipFinalSnapshot = true,
             VpcSecurityGroupIds = { networkInfra.SecurityGroupId },
             DbSubnetGroupName = dbSubnet.Name,
-        }, customResourceOptions);
+        }, customResourceOptions); */
         
-        var connectionStringParameter = new Pulumi.Aws.Ssm.Parameter("connectionString", new Pulumi.Aws.Ssm.ParameterArgs
+        /* var connectionStringParameter = new Pulumi.Aws.Ssm.Parameter("connectionString", new Pulumi.Aws.Ssm.ParameterArgs
         {
             Type = "SecureString",
             Name = "/care-calendar/db-connection-string",
             Value = ConnectionString,
             Description = "The connection string for the PostgreSQL database",
-        }, customResourceOptions);
+        }, customResourceOptions); */
     }
-    
-    public Output<string> ConnectionString => Output.Tuple(PostgresDb.Endpoint, PostgresDb.Username, PostgresDb.Password).Apply(t =>
+
+    public Output<string> ConnectionString =>
+        Output.Create(""); /*Output.Tuple(PostgresDb.Endpoint, PostgresDb.Username, PostgresDb.Password).Apply(t =>
     {
         var (endpoint, username, password) = t;
-        
+
         return $"Server={endpoint};Port=5432;Database=carecalendar;User Id={username};Password={password};";
-    });
+    });  */
 }
