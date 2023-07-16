@@ -33,7 +33,7 @@ public class Migration
         }
         catch (Exception e)
         {
-            // TODO: Log error
+            Console.WriteLine(e);
         }
     }
 }
