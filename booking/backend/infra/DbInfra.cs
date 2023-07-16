@@ -57,10 +57,10 @@ public class DbInfra
         }, customResourceOptions);
     }
     
-    public Output<string> ConnectionString => Output.Tuple(PostgresDb.Endpoint, PostgresDb.Port, PostgresDb.DbName, PostgresDb.Username, PostgresDb.Password).Apply(t =>
+    public Output<string> ConnectionString => Output.Tuple(PostgresDb.Address, PostgresDb.Port, PostgresDb.DbName, PostgresDb.Username, PostgresDb.Password).Apply(t =>
     {
-        var (endpoint, port, dbName, username, password) = t;
+        var (address, port, dbName, username, password) = t;
         
-        return $"Server={endpoint};Port={port};Database={dbName};User Id={username};Password={password};";
+        return $"Server={address};Port={port};Database={dbName};User Id={username};Password={password};";
     });
 }
