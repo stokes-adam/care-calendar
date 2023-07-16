@@ -61,6 +61,6 @@ public class DbInfra
     {
         var (address, port, dbName, username, password) = t;
         
-        return $"Server={address};Port={port};Database={dbName};User Id={username};Password={password};";
+        return $"postgres://{username}:{password}@{address}:{port}/{dbName}";
     });
 }
