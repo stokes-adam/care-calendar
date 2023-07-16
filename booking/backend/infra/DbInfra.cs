@@ -60,7 +60,7 @@ public class DbInfra
     public Output<string> ConnectionString => Output.Tuple(PostgresDb.Address, PostgresDb.Port, PostgresDb.DbName, PostgresDb.Username, PostgresDb.Password).Apply(t =>
     {
         var (address, port, dbName, username, password) = t;
-        
-        return $"postgres://{username}:{password}@{address}:{port}/{dbName}";
+
+        return $"Host={address};Port={port};Database={dbName};Username={username};Password={password};";
     });
 }
