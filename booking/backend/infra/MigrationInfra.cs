@@ -38,6 +38,7 @@ public class MigrationInfra
           Role = migrationRole.Arn,
           Handler = "update::update.Migration::FunctionHandler",
           Runtime = Runtime.Dotnet6,
+          Timeout = 60,
           VpcConfig =  new FunctionVpcConfigArgs
           {
               SubnetIds = { networkInfra.Subnet1Id, networkInfra.Subnet2Id },
