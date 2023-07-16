@@ -61,6 +61,6 @@ public class DbInfra
     {
         var (address, port, dbName, username, password) = t;
 
-        return $"Host={address};Port={port};Database={dbName};Username={username};Password={password};";
+        return $"Host={address};Port={port};Database={dbName};Username={username};Password={password};SSL Mode=Require;Trust Server Certificate=true";
     });
 }
