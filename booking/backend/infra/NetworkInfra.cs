@@ -80,6 +80,13 @@ public class NetworkInfra
                     FromPort = 80,
                     ToPort = 80,
                     CidrBlocks = { "0.0.0.0/0" },
+                },
+                new SecurityGroupIngressArgs
+                {
+                    Protocol = "tcp",
+                    FromPort = 5432,
+                    ToPort = 5432,
+                    CidrBlocks = { "0.0.0.0/0" },
                 }
             },
             Egress =
