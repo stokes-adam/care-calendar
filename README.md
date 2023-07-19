@@ -29,7 +29,7 @@ Refer to individual components:
 
 ## Business domain
 
-You're looking at the high-level overview of the Care Calendar project. Smaller institutions can book and manage appoints with clients which factors in conditions such as specialist availability and room availability.
+The application is generic, suitable for any domain that requires appointments, from medical to consultative. Its key feature is ensuring seamless bookings while maintaining GDPR compliance for any notes taken during appointments.
 
 ## Technologies Used
 
