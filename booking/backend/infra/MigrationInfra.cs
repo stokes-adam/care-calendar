@@ -1,3 +1,4 @@
+using System.Globalization;
 using Pulumi;
 using Pulumi.Aws.Iam;
 using Pulumi.Aws.Lambda;
@@ -52,5 +53,15 @@ public class MigrationInfra
               }
           },
       }, customResourceOptions);
+
+      var invocation = new Invocation("migration", new()
+      {
+            FunctionName = migrationLambda.Name,
+            Input = "{}",
+            Triggers =
+            {
+                { "redeployment", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture) }
+            },
+      });
    }
 }
