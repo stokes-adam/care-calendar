@@ -9,6 +9,8 @@
 
 Pulumi is an Infrastructure as Code platform that allows you to build, deploy and manage cloud infrastructure. In this case, AWS is the cloud provider. The plan is to build a relatively simple SaaS model business product in it's entirety. That means from the on-the-ground programming to hosting the infrastructure and deploying changes.
 
+Another important point is CI/CD.
+
 [About booking](booking/README.md)  
 [About the frontend](booking/frontend/README.md)  
 [About the backend](booking/backend/README.md)  
