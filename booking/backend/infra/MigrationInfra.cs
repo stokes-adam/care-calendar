@@ -65,6 +65,10 @@ public class MigrationInfra
             {
                 { "redeployment", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture) }
             },
-        }, new CustomResourceOptions { DependsOn = { migrationLambda } });
+        }, new CustomResourceOptions
+        {
+            DependsOn = { migrationLambda },
+            Provider = customResourceOptions.Provider,
+        });
     }
 }
