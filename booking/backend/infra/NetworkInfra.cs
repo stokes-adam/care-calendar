@@ -84,8 +84,8 @@ public class NetworkInfra
                 new SecurityGroupIngressArgs
                 {
                     Protocol = "tcp",
-                    FromPort = 5432,
-                    ToPort = 5432,
+                    FromPort = 5057,
+                    ToPort = 5057,
                     CidrBlocks = { "0.0.0.0/0" },
                 }
             },
