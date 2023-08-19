@@ -14,7 +14,7 @@ public class DatabaseComponent
         var subnet2Id = coreStack.RequireOutput("subnet2Id").Apply(id => id.ToString());
         var securityGroupId = coreStack.RequireOutput("securityGroupId").Apply(id => id.ToString());
         
-        var dbSubnet = new SubnetGroup("dbSubnet", new SubnetGroupArgs
+        var dbSubnet = new SubnetGroup("databaseSubnet", new SubnetGroupArgs
         {
             Name = "care-calendar-db-subnet",
             SubnetIds = { subnet1Id, subnet2Id },
