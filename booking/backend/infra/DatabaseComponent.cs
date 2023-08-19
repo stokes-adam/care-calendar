@@ -16,7 +16,7 @@ public class DatabaseComponent
         
         var dbSubnet = new SubnetGroup("databaseSubnet", new SubnetGroupArgs
         {
-            Name = "care-calendar-db-subnet",
+            Name = "care-calendar-database-subnet",
             SubnetIds = { subnet1Id, subnet2Id },
         }, customResourceOptions);
         
