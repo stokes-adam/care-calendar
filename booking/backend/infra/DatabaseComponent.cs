@@ -5,15 +5,19 @@ using Pulumi.Aws.SecretsManager;
 
 namespace infra;
 
-public class DbInfra
+public class DatabaseComponent
 {
     private Instance PostgresDb { get; }
-    public DbInfra(NetworkInfra networkInfra, CustomResourceOptions customResourceOptions)
+    public DatabaseComponent(StackReference coreStack, CustomResourceOptions customResourceOptions)
     {
+        var subnet1Id = coreStack.RequireOutput("subnet1Id").Apply(id => id.ToString());
+        var subnet2Id = coreStack.RequireOutput("subnet2Id").Apply(id => id.ToString());
+        var securityGroupId = coreStack.RequireOutput("securityGroupId").Apply(id => id.ToString());
+        
         var dbSubnet = new SubnetGroup("dbSubnet", new SubnetGroupArgs
         {
             Name = "care-calendar-db-subnet",
-            SubnetIds = { networkInfra.Subnet1Id, networkInfra.Subnet2Id },
+            SubnetIds = { subnet1Id, subnet2Id },
         }, customResourceOptions);
         
         var key = new Pulumi.Aws.Kms.Key("key", new Pulumi.Aws.Kms.KeyArgs
@@ -44,7 +48,7 @@ public class DbInfra
             Password = getSecretString("password"),
             Port = getSecretInt("port"),
             SkipFinalSnapshot = true,
-            VpcSecurityGroupIds = { networkInfra.SecurityGroupId },
+            VpcSecurityGroupIds = { securityGroupId },
             DbSubnetGroupName = dbSubnet.Name,
         }, customResourceOptions);
         

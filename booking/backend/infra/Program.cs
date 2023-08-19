@@ -4,21 +4,18 @@ using Pulumi.Aws;
 
 return await Deployment.RunAsync(() =>
 {
-    var coreStack = new StackReference("care-calendar/infra-core/default");
-    var providerRegion = coreStack.RequireOutput("providerRegion").Apply(region => region.ToString());
-    
-    var provider = new Provider("us-east-1", new ProviderArgs
+    var core = new StackReference("care-calendar/infra-core/default");
+
+    var customResourceOptions = new CustomResourceOptions
     {
-        Region = providerRegion,
-    });
-    
-    var customResourceOptions = new CustomResourceOptions {
-        Provider = provider,
-        DependsOn = coreStack
+        DependsOn = core,
+        Provider = new Provider("us-east-1", new ProviderArgs
+        {
+            Region = core.RequireOutput("providerRegion").Apply(region => region.ToString())!
+        }),
     };
     
-    var networkInfra = new NetworkInfra(customResourceOptions);
-    var dbInfra = new DbInfra(networkInfra, customResourceOptions);
-    var serviceInfra = new ServiceInfra(networkInfra, customResourceOptions);
-    var migrationInfra = new MigrationInfra(dbInfra, networkInfra, customResourceOptions);
+    var db = new DatabaseComponent(core, customResourceOptions);
+    var svc = new ServiceComponent(core, customResourceOptions);
+    var m = new MigrationComponent(core, db, customResourceOptions);
 });

@@ -7,13 +7,18 @@ using Pulumi.Aws.SecretsManager;
 
 namespace infra;
 
-public class ServiceInfra
+public class ServiceComponent
 {
-    public ServiceInfra(NetworkInfra networkInfra, CustomResourceOptions customResourceOptions)
+    public ServiceComponent(StackReference core, CustomResourceOptions customResourceOptions)
     {
         var runNumber = Environment.GetEnvironmentVariable("GITHUB_RUN_NUMBER") ?? "INFRA-GITHUB_RUN_NUMBER-NOT-SET";
+        
+        var subnet1Id = core.RequireOutput("subnet1Id").Apply(id => id.ToString());
+        var subnet2Id = core.RequireOutput("subnet2Id").Apply(id => id.ToString());
+        var securityGroupId = core.RequireOutput("securityGroupId").Apply(id => id.ToString());
+        var targetGroupArn = core.RequireOutput("targetGroupArn").Apply(id => id.ToString());
 
-        var invokeOptions = new InvokeOptions() { Provider = customResourceOptions.Provider };
+        var invokeOptions = new InvokeOptions { Provider = customResourceOptions.Provider };
         
         var ghcrCredentials = Output.Create(GetSecret.InvokeAsync(new()
         {
@@ -134,7 +139,7 @@ public class ServiceInfra
             }]"
             )
         }, customResourceOptions);
-
+        
         var service = new Service("service", new ServiceArgs
         {
             Cluster = cluster.Arn,
@@ -144,8 +149,17 @@ public class ServiceInfra
             NetworkConfiguration = new ServiceNetworkConfigurationArgs
             {
                 AssignPublicIp = true,
-                Subnets = { networkInfra.Subnet1Id, networkInfra.Subnet2Id },
-                SecurityGroups = { networkInfra.SecurityGroupId }
+                Subnets = { subnet1Id, subnet2Id },
+                SecurityGroups = { securityGroupId }
+            },
+            LoadBalancers =
+            {
+                new ServiceLoadBalancerArgs
+                {
+                    TargetGroupArn = targetGroupArn,
+                    ContainerName = "hello-world",
+                    ContainerPort = 5057
+                }
             }
         }, customResourceOptions);
     }
