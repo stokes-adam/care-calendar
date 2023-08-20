@@ -4,7 +4,7 @@ using Pulumi.Aws.Iam;
 using Pulumi.Aws.Lambda;
 using Pulumi.Aws.Lambda.Inputs;
 
-namespace infra;
+namespace infra.components;
 
 public class MigrationComponent
 {

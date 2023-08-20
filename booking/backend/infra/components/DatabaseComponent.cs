@@ -3,7 +3,7 @@ using Pulumi;
 using Pulumi.Aws.Rds;
 using Pulumi.Aws.SecretsManager;
 
-namespace infra;
+namespace infra.components;
 
 public class DatabaseComponent
 {

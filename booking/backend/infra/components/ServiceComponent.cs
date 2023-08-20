@@ -5,16 +5,15 @@ using Pulumi.Aws.Ecs.Inputs;
 using Pulumi.Aws.Iam;
 using Pulumi.Aws.SecretsManager;
 
-namespace infra;
+namespace infra.components;
 
 public class ServiceComponent
 {
     public ServiceComponent(StackReference core, CustomResourceOptions customResourceOptions)
     {
         var runNumber = Environment.GetEnvironmentVariable("GITHUB_RUN_NUMBER") ?? "INFRA-GITHUB_RUN_NUMBER-NOT-SET";
-        
-        var subnet1Id = core.RequireOutput("subnet1Id").Apply(id => id.ToString());
-        var subnet2Id = core.RequireOutput("subnet2Id").Apply(id => id.ToString());
+
+        var subnetIds = core.RequireOutput("subnetIds");
         var securityGroupId = core.RequireOutput("securityGroupId").Apply(id => id.ToString());
         var targetGroupArn = core.RequireOutput("targetGroupArn").Apply(id => id.ToString());
 
@@ -114,7 +113,8 @@ public class ServiceComponent
             RequiresCompatibilities = { "FARGATE" },
             ExecutionRoleArn = executionRole.Arn,
             TaskRoleArn = taskRole.Arn,
-            ContainerDefinitions = ghcrCredentials.Apply(c => $@"[{{
+            ContainerDefinitions = ghcrCredentials.Apply(c => $@"
+            [{{
                 ""name"": ""hello-world"",
                 ""image"": ""ghcr.io/stokes-adam/care-calendar/backend-api:{runNumber}"",
                 ""portMappings"": [{{
@@ -135,8 +135,8 @@ public class ServiceComponent
                 }},
                 ""repositoryCredentials"": {{
                     ""credentialsParameter"": """ + c.Arn + @"""
-                }
-            }]"
+                }}
+            }}]"
             )
         }, customResourceOptions);
         
@@ -149,7 +149,7 @@ public class ServiceComponent
             NetworkConfiguration = new ServiceNetworkConfigurationArgs
             {
                 AssignPublicIp = true,
-                Subnets = { subnet1Id, subnet2Id },
+                Subnets = subnetIds,
                 SecurityGroups = { securityGroupId }
             },
             LoadBalancers =

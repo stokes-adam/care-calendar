@@ -16,11 +16,11 @@ public class PostgresFirmCommandService : IFirmCommandService
         _connectionString = configuration.ConnectionString;
     }
 
-    public Task<Firm> CreateFirm(Firm firm)
+    public async Task<Firm> CreateFirm(Firm firm)
     {
         try
         {
-            using var connection = new NpgsqlConnection(_connectionString);
+            await using var connection = new NpgsqlConnection(_connectionString);
             connection.Open();
 
             const string sql = @"
@@ -35,13 +35,13 @@ public class PostgresFirmCommandService : IFirmCommandService
                 RETURNING id
               ";
 
-            using var command = new NpgsqlCommand(sql, connection);
+            await using var command = new NpgsqlCommand(sql, connection);
             command.Parameters.AddWithValue("ownerPersonId", firm.OwnerPersonId);
             command.Parameters.AddWithValue("name", firm.Name);
 
             var firmId = (Guid)(command.ExecuteScalar() ?? throw new Exception("Failed to create firm"));
 
-            return Task.FromResult(firm with { Id = firmId });
+            return firm with { Id = firmId };
         }
         catch (Exception e)
         {
@@ -50,11 +50,11 @@ public class PostgresFirmCommandService : IFirmCommandService
         }
     }
 
-    public Task AssignFirmRoleToPerson(Guid firmId, Guid personId, string role)
+    public async Task AssignFirmRoleToPerson(Guid firmId, Guid personId, string role)
     {
         try
         {
-            using var connection = new NpgsqlConnection(_connectionString);
+            await using var connection = new NpgsqlConnection(_connectionString);
             connection.Open();
             
             const string sql = @"
@@ -68,14 +68,12 @@ public class PostgresFirmCommandService : IFirmCommandService
                 WHERE name = @role
               ";
             
-            using var command = new NpgsqlCommand(sql, connection);
+            await using var command = new NpgsqlCommand(sql, connection);
             command.Parameters.AddWithValue("firmId", firmId);
             command.Parameters.AddWithValue("personId", personId);
             command.Parameters.AddWithValue("role", role);
             
             command.ExecuteNonQuery();
-            
-            return Task.CompletedTask;
         }
         catch (Exception e)
         {
@@ -84,11 +82,11 @@ public class PostgresFirmCommandService : IFirmCommandService
         }
     }
 
-    public Task RemoveFirmRoleFromPerson(Guid firmId, Guid personId, string role)
+    public async Task RemoveFirmRoleFromPerson(Guid firmId, Guid personId, string role)
     {
         try
         {
-            using var connection = new NpgsqlConnection(_connectionString);
+            await using var connection = new NpgsqlConnection(_connectionString);
             connection.Open();
             
             const string sql = @"
@@ -98,14 +96,12 @@ public class PostgresFirmCommandService : IFirmCommandService
                   AND role_id = (SELECT id FROM roles WHERE name = @role)
               ";
             
-            using var command = new NpgsqlCommand(sql, connection);
+            await using var command = new NpgsqlCommand(sql, connection);
             command.Parameters.AddWithValue("firmId", firmId);
             command.Parameters.AddWithValue("personId", personId);
             command.Parameters.AddWithValue("role", role);
             
             command.ExecuteNonQuery();
-            
-            return Task.CompletedTask;
         }
         catch (Exception e)
         {
