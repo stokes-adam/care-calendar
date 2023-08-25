@@ -152,15 +152,6 @@ public class ServiceComponent
                 Subnets = { subnet1Id, subnet2Id },
                 SecurityGroups = { securityGroupId }
             },
-            LoadBalancers =
-            {
-                new ServiceLoadBalancerArgs
-                {
-                    TargetGroupArn = targetGroupArn,
-                    ContainerName = "hello-world",
-                    ContainerPort = 5057
-                }
-            }
         }, customResourceOptions);
     }
 }
