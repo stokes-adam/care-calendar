@@ -274,8 +274,8 @@ return await Deployment.RunAsync(() =>
         ZoneId = zone.Id,
         Aliases = new RecordAliasArgs
         {
-            Name = distribution.DomainName,
-            ZoneId = distribution.HostedZoneId,
+            Name = alb.DnsName,
+            ZoneId = alb.ZoneId,
             EvaluateTargetHealth = false,
         },
     }, customResourceOptions);

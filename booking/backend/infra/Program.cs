@@ -15,7 +15,6 @@ return await Deployment.RunAsync(() =>
         }),
     };
 
-    return;
     var db = new DatabaseComponent(core, customResourceOptions);
     var svc = new ServiceComponent(core, customResourceOptions);
     var m = new MigrationComponent(core, db, customResourceOptions);
