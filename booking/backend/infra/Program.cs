@@ -1,5 +1,4 @@
 ﻿using infra;
-using infra.components;
 using Pulumi;
 using Pulumi.Aws;
 
@@ -16,7 +15,8 @@ return await Deployment.RunAsync(() =>
         }),
     };
 
+    return;
     var db = new DatabaseComponent(core, customResourceOptions);
-    var m = new MigrationComponent(core, db, customResourceOptions);
     var svc = new ServiceComponent(core, customResourceOptions);
+    var m = new MigrationComponent(core, db, customResourceOptions);
 });
