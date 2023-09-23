@@ -5,16 +5,10 @@ using model.interfaces;
 
 namespace service;
 
-public class Configuration : IConfiguration
+public class AwsConfiguration : IConfiguration
 {
-    public string ConnectionString { get; }
-    public RegionEndpoint Region { get; }
-    
-    public Configuration()
-    {
-        ConnectionString = GetConnectionString();
-        Region = GetRegion();
-    }
+    public string ConnectionString { get; } = GetConnectionString();
+    public RegionEndpoint Region { get; } = GetRegion();
     
     private static RegionEndpoint GetRegion()
     {

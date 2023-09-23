@@ -24,4 +24,5 @@ docker run --name $tag `
 
 $connectionString = "Server=localhost;Port=5432;Database=$database;User Id=$user;Password=$password;"
 
+# TODO the migration needs to live in its own docker container
 dotnet run $connectionString

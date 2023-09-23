@@ -1,6 +1,6 @@
 ﻿namespace model.records;
 
-public record Person
+public record PersonDetail
 (
     Guid Id,
     string FirstName,

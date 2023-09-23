@@ -7,13 +7,13 @@ using model.interfaces;
 
 namespace service;
 
-public class Encryption
+public class AwsEncryption : IEncryption
 {
-    private readonly ILogger<Encryption> _logger;
+    private readonly ILogger<AwsEncryption> _logger;
     private readonly AmazonKeyManagementServiceClient _kmsClient;
     private readonly string _kmsKeyId;
 
-    public Encryption(ILogger<Encryption> logger, IConfiguration configuration)
+    public AwsEncryption(ILogger<AwsEncryption> logger, IConfiguration configuration)
     {
         _logger = logger;
         _kmsClient = new AmazonKeyManagementServiceClient(configuration.Region);

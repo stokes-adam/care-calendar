@@ -12,10 +12,20 @@ builder.Configuration.AddCommandLine(args);
 
 builder.Services.AddControllers();
 
+if (builder.Environment.IsDevelopment())
+{
+    Console.WriteLine("Using local configuration");
+    builder.Services.AddSingleton<IConfiguration, LocalConfiguration>();
+    builder.Services.AddSingleton<IEncryption, NoEncryption>();
+}
+else
+{
+    builder.Services.AddSingleton<IConfiguration, AwsConfiguration>();
+    builder.Services.AddSingleton<IEncryption, AwsEncryption>();
+}
+
 builder.Services
     .AddLogging()
-    .AddSingleton<IConfiguration, Configuration>()
-    .AddSingleton<Encryption>()
     .AddSingleton<IFirmService, PostgresFirmService>()
     .AddEndpointsApiExplorer()
     .AddSwaggerGen();
