@@ -16,10 +16,7 @@ builder.Services
     .AddLogging()
     .AddSingleton<IConfiguration, Configuration>()
     .AddSingleton<Encryption>()
-    .AddSingleton<IFirmQueryService, PostgresFirmQueryService>()
-    .AddSingleton<IFirmCommandService, PostgresFirmCommandService>()
-    .AddSingleton<IPersonQueryService, PostgresPersonQueryService>()
-    .AddSingleton<IPersonCommandService, PostgresPersonCommandService>()
+    .AddSingleton<IFirmService, PostgresFirmService>()
     .AddEndpointsApiExplorer()
     .AddSwaggerGen();
 

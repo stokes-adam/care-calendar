@@ -16,7 +16,7 @@ public class Configuration : IConfiguration
         Region = GetRegion();
     }
     
-    private RegionEndpoint GetRegion()
+    private static RegionEndpoint GetRegion()
     {
         var regionString = Environment.GetEnvironmentVariable("Region")
                            ?? throw new Exception("Region not set");
@@ -26,7 +26,7 @@ public class Configuration : IConfiguration
         return region;
     }
 
-    private string GetConnectionString()
+    private static string GetConnectionString()
     {
         var service = new AmazonSimpleSystemsManagementClient();
         
