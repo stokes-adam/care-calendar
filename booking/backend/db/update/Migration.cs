@@ -15,6 +15,8 @@ public class Migration
     {
         try
         {
+            Console.WriteLine($"Using connection string: {_connectionString}");
+            
             var upgrader =
                 DeployChanges.To
                     .PostgresqlDatabase(_connectionString)

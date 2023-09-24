@@ -22,7 +22,3 @@ docker run --name $tag `
     -p 5432:5432 `
     -d postgres:latest
 
-$connectionString = "Server=localhost;Port=5432;Database=$database;User Id=$user;Password=$password;"
-
-# TODO the migration needs to live in its own docker container
-dotnet run $connectionString

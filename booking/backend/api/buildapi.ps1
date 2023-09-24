@@ -6,10 +6,7 @@ param (
     [string]$password,
 
     [Parameter(Mandatory=$true)]
-    [string]$database,
-
-    [Parameter(Mandatory=$true)]
-    [string]$encryptionKey
+    [string]$database
 )
 
 $connectionString = "Server=localhost;Port=5432;Database=$database;User Id=$user;Password=$password;"
