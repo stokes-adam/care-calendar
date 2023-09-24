@@ -9,11 +9,11 @@ param (
     [string]$DATABASE
 )
 
-$ErrorActionPreference = "Stop"
-
 $tag="care-calendar-migration"
 
-$CONNECTION_STRING = "Server=localhost;Port=5432;Database=$DATABASE;User Id=$USER;Password=$PASSWORD;"
+$postgresIP = docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' care-calendar-postgres
+
+$CONNECTION_STRING = "Server=$postgresIP;Port=5432;Database=$DATABASE;User Id=$USER;Password=$PASSWORD;"
 
 docker rm -f $tag 2>&1 | Out-Null
 
