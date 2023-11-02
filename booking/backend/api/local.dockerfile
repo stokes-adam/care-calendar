@@ -14,4 +14,4 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
 COPY --from=build-env /app/api/out .
 
-ENV ASPNETCORE_URLS=http://+:5057
+ENTRYPOINT ["dotnet", "api.dll"]

@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: care-calendar-postgres
+    environment:
+      POSTGRES_USER: localadmin
+      POSTGRES_PASSWORD: localadmin
+      POSTGRES_DB: care_calendar_local
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  migration:
+    build:
+      context: ./backend/db/update
+      dockerfile: local.dockerfile
+    container_name: care-calendar-migration
+    environment:
+      ConnectionString: "Host=postgres;Database=care_calendar_local;Username=localadmin;Password=localadmin"
+    depends_on:
+      - postgres
+
+  api:
+    build:
+      context: ./backend/api
+      dockerfile: local.dockerfile
+    container_name: care-calendar-api
+    environment:
+      ASPNETCORE_URLS: "http://+:5057"
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionString: "Host=postgres;Database=care_calendar_local;Username=localadmin;Password=localadmin"
+    ports:
+      - "5057:5057"
+    depends_on:
+      - migration
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: local.dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
