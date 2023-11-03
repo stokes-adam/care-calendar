@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  postgres:
+  db:
     image: postgres:latest
-    container_name: care-calendar-postgres
+    container_name: care-calendar-db
     environment:
       POSTGRES_USER: localadmin
       POSTGRES_PASSWORD: localadmin
@@ -12,6 +12,11 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d care_calendar_local -U localadmin"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   migration:
     build:
@@ -19,9 +24,10 @@ services:
       dockerfile: local.dockerfile
     container_name: care-calendar-migration
     environment:
-      ConnectionString: "Host=postgres;Database=care_calendar_local;Username=localadmin;Password=localadmin"
+      ConnectionString: "Host=db;Database=care_calendar_local;Username=localadmin;Password=localadmin"
     depends_on:
-      - postgres
+      db:
+        condition: service_healthy
 
   api:
     build:
@@ -31,20 +37,25 @@ services:
     environment:
       ASPNETCORE_URLS: "http://+:5057"
       ASPNETCORE_ENVIRONMENT: Development
-      ConnectionString: "Host=postgres;Database=care_calendar_local;Username=localadmin;Password=localadmin"
+      ConnectionString: "Host=db;Database=care_calendar_local;Username=localadmin;Password=localadmin"
     ports:
       - "5057:5057"
     depends_on:
       - migration
 
-  frontend:
+  app:
     build:
       context: ./frontend
       dockerfile: local.dockerfile
+    container_name: care-calendar-app
     ports:
       - "5000:5000"
     depends_on:
       - api
+    volumes:
+      - ./frontend:/wwwroot
+      - node_modules:/wwwroot/node_modules
 
 volumes:
   pgdata:
+  node_modules:
