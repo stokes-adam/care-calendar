@@ -1,33 +1,28 @@
+using System.Data;
 using api;
 using model.interfaces;
-using service;
+using Npgsql;
 using service.postgres;
-using IConfiguration = model.interfaces.IConfiguration;
 
 Console.WriteLine("Starting");
 
+Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Configuration.AddCommandLine(args);
-
 builder.Services.AddControllers();
 
-if (builder.Environment.IsDevelopment())
-{
-    Console.WriteLine("Using local configuration");
-    builder.Services.AddSingleton<IConfiguration, LocalConfiguration>();
-    builder.Services.AddSingleton<IEncryption, NoEncryption>();
-}
-else
-{
-    builder.Services.AddSingleton<IConfiguration, AwsConfiguration>();
-    builder.Services.AddSingleton<IEncryption, AwsEncryption>();
-}
-
 builder.Services
+    .AddEnvironmentSpecificServices(builder.Environment)
     .AddLogging()
-    .AddSingleton<IFirmService, PostgresFirmService>()
-    .AddSingleton<IPersonService, PostgresPersonService>()
+    .AddScoped<IDbConnection>(p =>
+    {
+        var provider = p.GetRequiredService<IConfigManager>();
+        
+        return new NpgsqlConnection(provider.ConnectionString);
+    })
+    .AddScoped<IFirmService, PostgresFirmService>()
+    .AddScoped<IPersonService, PostgresPersonService>()
     .AddEndpointsApiExplorer()
     .AddSwaggerGen();
 
@@ -41,7 +36,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(builder => builder
     .WithOrigins(
-        "http://localhost:3000",
+        "http://localhost:5000",
         "https://carecalendar.xyz"
     )
     .WithMethods("GET", "POST", "PUT", "DELETE")

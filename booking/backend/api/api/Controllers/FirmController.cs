@@ -36,7 +36,7 @@ public class FirmController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "Error getting firm");
-            return StatusCode(500);
+            return StatusCode(500, e.Message);
         }
     }
     
@@ -53,7 +53,7 @@ public class FirmController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "Error creating firm");
-            return StatusCode(500);
+            return StatusCode(500, e.Message);
         }
     }
 }

@@ -1,51 +1,47 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
 using Microsoft.Extensions.Logging;
 using model.exceptions;
 using model.interfaces;
 using model.records;
-using Npgsql;
 
 namespace service.postgres;
 
 public class PostgresFirmService : IFirmService
 {
     private readonly ILogger<PostgresFirmService> _logger;
-    private readonly NpgsqlConnection _connection;
+    private readonly IDbConnection _connection;
     
-    public PostgresFirmService(ILogger<PostgresFirmService> logger, IConfiguration configuration)
+    public PostgresFirmService(ILogger<PostgresFirmService> logger, IDbConnection connection)
     {
         _logger = logger;
-        _connection = new NpgsqlConnection(configuration.ConnectionString);
-        _connection.Open();
-        DefaultTypeMap.MatchNamesWithUnderscores = true;
+        _connection = connection;
     }
     
     public async Task<Firm> GetFirm(Guid firmId)
     {
+        const string sql = @"
+             SELECT
+                id,
+                created,
+                updated,
+                deleted,
+                owner_person_id,
+                name,
+                address,
+                city
+             FROM firms
+             WHERE id = @firmId
+            ";
+        
         try
         {
-            const string sql = @"
-                 SELECT
-                    id,
-                    created,
-                    updated,
-                    deleted,
-                    owner_person_id,
-                    name,
-                    address,
-                    city
-                 FROM firms
-                 WHERE id = @firmId
-                ";
-
+            _connection.EnsureOpen();
+            
             var args = new { firmId };
             
-            var firm = await _connection.QueryFirstAsync<Firm>(sql, args);
-            
-            if (firm == null)
-            {
-                throw new RecordNotFoundException<Firm>(firmId);
-            }
+            var firm = await _connection.QueryFirstOrDefaultAsync<Firm>(sql, args)
+                       ?? throw new RecordNotFoundException<Firm>(firmId);
 
             return firm;
         }
@@ -56,26 +52,28 @@ public class PostgresFirmService : IFirmService
         }
     }
 
-    public async Task<Firm> CreateFirm(Firm firm)
+    public async Task<Guid> CreateFirm(Firm firm)
     {
+        const string sql = @"
+            INSERT INTO firms (
+                owner_person_id,
+                name,
+                address,
+                city
+            )
+            VALUES (
+                @ownerPersonId,
+                @name,
+                @address,
+                @city
+            )
+            RETURNING id
+          ";
+
         try
         {
-            const string sql = @"
-                INSERT INTO firms (
-                    owner_person_id,
-                    name,
-                    address,
-                    city
-                )
-                VALUES (
-                    @ownerPersonId,
-                    @name,
-                    @address,
-                    @city
-                )
-                RETURNING id
-              ";
-
+            _connection.EnsureOpen();
+            
             var args = new
             {
                 ownerPersonId = firm.OwnerPersonId,
@@ -84,9 +82,9 @@ public class PostgresFirmService : IFirmService
                 city = firm.City
             };
             
-            var firmId = await _connection.ExecuteScalarAsync<Guid>(sql, args);
-            
-            return firm with { Id = firmId };
+            var id = await _connection.ExecuteScalarAsync<Guid>(sql, args);
+
+            return id;
         }
         catch (Exception e)
         {
