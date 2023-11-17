@@ -27,6 +27,7 @@ else
 builder.Services
     .AddLogging()
     .AddSingleton<IFirmService, PostgresFirmService>()
+    .AddSingleton<IPersonService, PostgresPersonService>()
     .AddEndpointsApiExplorer()
     .AddSwaggerGen();
 

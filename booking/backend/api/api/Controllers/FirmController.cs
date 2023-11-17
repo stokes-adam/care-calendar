@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using model;
+using model.exceptions;
 using model.interfaces;
 using model.records;
 using service;
@@ -46,8 +47,8 @@ public class FirmController : ControllerBase
         try 
         {
             var createdFirm = await _firmService.CreateFirm(firm);
-            
-            return CreatedAtAction(nameof(GetFirm), new { firmId = createdFirm.Id }, createdFirm);
+
+            return Ok(createdFirm);
         }
         catch (Exception e)
         {

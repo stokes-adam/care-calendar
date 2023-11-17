@@ -3,6 +3,9 @@
 public record Appointment
 (
     Guid Id,
+    DateTime Created,
+    DateTime Updated,
+    DateTime? Deleted,
     Guid ClientId,
     Guid ConsultantId, 
     DateTime StartTime,

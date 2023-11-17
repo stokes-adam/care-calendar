@@ -2,7 +2,10 @@
 
 public record Firm
 (
-    Guid? Id,
+    Guid Id,
+    DateTime Created,
+    DateTime Updated,
+    DateTime? Deleted,
     Guid OwnerPersonId,
     string Name,
     string Address,

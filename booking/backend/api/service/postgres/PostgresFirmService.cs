@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Logging;
+using model.exceptions;
 using model.interfaces;
 using model.records;
 using Npgsql;
@@ -9,13 +10,14 @@ namespace service.postgres;
 public class PostgresFirmService : IFirmService
 {
     private readonly ILogger<PostgresFirmService> _logger;
-    private readonly NpgsqlConnection connection;
+    private readonly NpgsqlConnection _connection;
     
     public PostgresFirmService(ILogger<PostgresFirmService> logger, IConfiguration configuration)
     {
         _logger = logger;
-        connection = new NpgsqlConnection(configuration.ConnectionString);
-        connection.Open();
+        _connection = new NpgsqlConnection(configuration.ConnectionString);
+        _connection.Open();
+        DefaultTypeMap.MatchNamesWithUnderscores = true;
     }
     
     public async Task<Firm> GetFirm(Guid firmId)
@@ -24,16 +26,21 @@ public class PostgresFirmService : IFirmService
         {
             const string sql = @"
                  SELECT
-                      id,
-                      owner_person_id,
-                      name
+                    id,
+                    created,
+                    updated,
+                    deleted,
+                    owner_person_id,
+                    name,
+                    address,
+                    city
                  FROM firms
                  WHERE id = @firmId
                 ";
 
             var args = new { firmId };
             
-            var firm = await connection.QueryFirstAsync<Firm>(sql, args);
+            var firm = await _connection.QueryFirstAsync<Firm>(sql, args);
             
             if (firm == null)
             {
@@ -56,11 +63,15 @@ public class PostgresFirmService : IFirmService
             const string sql = @"
                 INSERT INTO firms (
                     owner_person_id,
-                    name
+                    name,
+                    address,
+                    city
                 )
                 VALUES (
                     @ownerPersonId,
-                    @name
+                    @name,
+                    @address,
+                    @city
                 )
                 RETURNING id
               ";
@@ -68,10 +79,12 @@ public class PostgresFirmService : IFirmService
             var args = new
             {
                 ownerPersonId = firm.OwnerPersonId,
-                name = firm.Name
+                name = firm.Name,
+                address = firm.Address,
+                city = firm.City
             };
             
-            var firmId = await connection.ExecuteScalarAsync<Guid>(sql, args);
+            var firmId = await _connection.ExecuteScalarAsync<Guid>(sql, args);
             
             return firm with { Id = firmId };
         }

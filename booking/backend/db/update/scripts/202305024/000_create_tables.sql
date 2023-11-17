@@ -7,7 +7,7 @@ CREATE TABLE persons (
     deleted TIMESTAMP
 );
 
-CREATE TABLE persons_details (
+CREATE TABLE person_details (
     id UUID NOT NULL DEFAULT uuid_generate_v4() PRIMARY KEY,
     created TIMESTAMP NOT NULL DEFAULT NOW(),
     updated TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -18,7 +18,7 @@ CREATE TABLE persons_details (
     encrypted_email TEXT NOT NULL,
     encrypted_phone TEXT NOT NULL
 );
-CREATE INDEX idx_person_details_person_id ON persons_details (person_id);
+CREATE INDEX idx_person_details_person_id ON person_details (person_id);
 
 
 CREATE TABLE firms (
