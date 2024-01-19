@@ -1,0 +1,12 @@
+﻿using Amazon;
+using model.interfaces;
+
+namespace service;
+
+public class LocalEnvironment : IEnvironment
+{
+    public string ConnectionString { get; } = Environment.GetEnvironmentVariable("ConnectionString")
+                                              ?? throw new Exception("ConnectionString not set");
+
+    public RegionEndpoint Region { get; } = null;
+}

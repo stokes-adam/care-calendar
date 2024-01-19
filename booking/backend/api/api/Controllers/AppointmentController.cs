@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using model;
+using model.dtos;
 using model.records;
 using service;
 
@@ -17,16 +18,16 @@ public class AppointmentController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<IActionResult> CreateAppointment([FromBody] Appointment appointment)
+    public async Task<IActionResult> CreateAppointment([FromBody] CreateAppointmentDto createAppointmentDto)
     {
         try
         {
-            return Ok(appointment);
+            return Ok(createAppointmentDto);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "Error creating appointment");
-            return StatusCode(500);
+            return StatusCode(500, e.Message);
         }
     }
 }

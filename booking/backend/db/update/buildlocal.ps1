@@ -22,6 +22,3 @@ docker run --name $tag `
     -p 5432:5432 `
     -d postgres:latest
 
-$connectionString = "Server=localhost;Port=5432;Database=$database;User Id=$user;Password=$password;"
-
-dotnet run $connectionString

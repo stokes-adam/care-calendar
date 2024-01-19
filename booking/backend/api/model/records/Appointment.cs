@@ -11,4 +11,4 @@ public record Appointment
     DateTime StartTime,
     DateTime EndTime, 
     string? Notes
-) : Entity(Id, Created, Updated, Deleted);
+);

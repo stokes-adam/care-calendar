@@ -2,7 +2,7 @@
 
 namespace model.interfaces;
 
-public interface IConfiguration
+public interface IEnvironment
 {
     string ConnectionString { get; }
     RegionEndpoint Region { get; }

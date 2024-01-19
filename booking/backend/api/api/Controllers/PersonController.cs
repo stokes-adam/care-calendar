@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using model;
+using model.dtos;
 using model.interfaces;
 using model.records;
 using service;
@@ -11,61 +12,30 @@ namespace api.Controllers;
 public class PersonController : ControllerBase
 {
     private readonly ILogger<PersonController> _logger;
-    private readonly IPersonQueryService _personQueryService;
-    private readonly IPersonCommandService _personCommandService;
-    
-    public PersonController(
-        ILogger<PersonController> logger,
-        IPersonQueryService personQueryService,
-        IPersonCommandService personCommandService
-        )
+    private readonly IPersonService _personService;
+
+    public PersonController(ILogger<PersonController> logger, IPersonService personService)
     {
         _logger = logger;
-        _personQueryService = personQueryService;
-        _personCommandService = personCommandService;
-    }
- 
-    [HttpPost]
-    public async Task<IActionResult> CreatePerson([FromBody] Person person)
-    {
-        try
-        {
-            var newPerson = await _personCommandService.CreatePerson(person);
-            
-            return Ok(newPerson);
-        }
-        catch (AccessViolationException e)
-        {
-            return Unauthorized(e.Message);
-        }
-        catch (RecordNotFoundException<Firm> e)
-        {
-            return NotFound(e.Message);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Error creating person");
-            return StatusCode(500);
-        }
+        _personService = personService;
     }
     
-    [HttpGet("{personId:guid}")]
-    public async Task<IActionResult> GetPerson(Guid personId)
+    [HttpPost]
+    public async Task<IActionResult> CreatePerson([FromBody] CreatePersonDetail createPersonDto)
     {
         try
         {
-            var person = await _personQueryService.GetPerson(personId);
+            var personId = await _personService.CreatePerson();
+
+            var personDetailId = await _personService.CreatePersonDetail(personId, createPersonDto);
             
-            return CreatedAtAction(nameof(GetPerson), new { personId }, person);
-        }
-        catch (RecordNotFoundException<Person> e)
-        {
-            return NotFound(e.Message);
+            return Ok(new { personId, personDetailId });
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Error getting person");
-            return StatusCode(500);
+            _logger.LogError(e, "Failed to create person");
+            
+            return StatusCode(500, e.Message);
         }
     }
 }

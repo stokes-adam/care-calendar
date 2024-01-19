@@ -5,18 +5,12 @@ using model.interfaces;
 
 namespace service;
 
-public class Configuration : IConfiguration
+public class AwsEnvironment : IEnvironment
 {
-    public string ConnectionString { get; }
-    public RegionEndpoint Region { get; }
+    public string ConnectionString { get; } = GetConnectionString();
+    public RegionEndpoint Region { get; } = GetRegion();
     
-    public Configuration()
-    {
-        ConnectionString = GetConnectionString();
-        Region = GetRegion();
-    }
-    
-    private RegionEndpoint GetRegion()
+    private static RegionEndpoint GetRegion()
     {
         var regionString = Environment.GetEnvironmentVariable("Region")
                            ?? throw new Exception("Region not set");
@@ -26,7 +20,7 @@ public class Configuration : IConfiguration
         return region;
     }
 
-    private string GetConnectionString()
+    private static string GetConnectionString()
     {
         var service = new AmazonSimpleSystemsManagementClient();
         

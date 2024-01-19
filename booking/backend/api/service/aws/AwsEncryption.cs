@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography;
-using System.Text;
+﻿using System.Text;
 using Amazon.KeyManagementService;
 using Amazon.KeyManagementService.Model;
 using Microsoft.Extensions.Logging;
@@ -7,16 +6,16 @@ using model.interfaces;
 
 namespace service;
 
-public class Encryption
+public class AwsEncryption : IEncryption
 {
-    private readonly ILogger<Encryption> _logger;
+    private readonly ILogger<AwsEncryption> _logger;
     private readonly AmazonKeyManagementServiceClient _kmsClient;
     private readonly string _kmsKeyId;
 
-    public Encryption(ILogger<Encryption> logger, IConfiguration configuration)
+    public AwsEncryption(ILogger<AwsEncryption> logger, IEnvironment environment)
     {
         _logger = logger;
-        _kmsClient = new AmazonKeyManagementServiceClient(configuration.Region);
+        _kmsClient = new AmazonKeyManagementServiceClient(environment.Region);
         _kmsKeyId = Environment.GetEnvironmentVariable("EncryptionKeyId")
                           ?? throw new Exception("EncryptionKeyId not set");
     }

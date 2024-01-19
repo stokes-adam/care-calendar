@@ -1,31 +1,28 @@
+using System.Data;
 using api;
 using model.interfaces;
-using service;
+using Npgsql;
 using service.postgres;
-using IConfiguration = model.interfaces.IConfiguration;
 
 Console.WriteLine("Starting");
 
+Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Configuration.AddCommandLine(args);
-
 builder.Services.AddControllers();
 
 builder.Services
+    .AddEnvironmentSpecificServices(builder.Environment.IsDevelopment())
     .AddLogging()
-    .AddSingleton<IConfiguration, Configuration>()
-    .AddSingleton<Encryption>()
-    .AddSingleton<IFirmQueryService, PostgresFirmQueryService>()
-    .AddSingleton<IFirmCommandService, PostgresFirmCommandService>()
-    .AddSingleton<IPersonQueryService, PostgresPersonQueryService>()
-    .AddSingleton<IPersonCommandService, PostgresPersonCommandService>()
+    .AddScoped<IDbConnection>(CreateConnection)
+    .AddScoped<IFirmService, PostgresFirmService>()
+    .AddScoped<IPersonService, PostgresPersonService>()
     .AddEndpointsApiExplorer()
     .AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -34,7 +31,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(builder => builder
     .WithOrigins(
-        "http://localhost:3000",
+        "http://localhost:5000",
         "https://carecalendar.xyz"
     )
     .WithMethods("GET", "POST", "PUT", "DELETE")
@@ -48,3 +45,11 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+NpgsqlConnection CreateConnection(IServiceProvider serviceProvider)
+{
+    var configuration = serviceProvider.GetRequiredService<IEnvironment>();
+
+    return new NpgsqlConnection(configuration.ConnectionString);
+}

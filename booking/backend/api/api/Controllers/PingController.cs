@@ -7,8 +7,5 @@ namespace api.Controllers;
 public class PingController : ControllerBase
 {
     [HttpGet]
-    public IActionResult Ping()
-    {
-        return Ok("pong");
-    }
+    public IActionResult Ping() => Ok("pong");
 }

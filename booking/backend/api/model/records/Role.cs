@@ -1,13 +1,9 @@
 ﻿namespace model.records;
 
-public record Firm
-(
+public record Role(
     Guid Id,
     DateTime Created,
     DateTime Updated,
     DateTime? Deleted,
-    Guid OwnerPersonId,
-    string Name,
-    string Address,
-    string City
+    string Name
 );

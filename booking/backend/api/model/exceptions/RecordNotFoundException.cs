@@ -1,4 +1,4 @@
-﻿namespace service;
+﻿namespace model.exceptions;
 
 public class RecordNotFoundException<T> : Exception
 {
