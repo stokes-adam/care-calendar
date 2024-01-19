@@ -5,7 +5,7 @@ using model.interfaces;
 
 namespace service;
 
-public class AwsConfiguration : IConfiguration
+public class AwsEnvironment : IEnvironment
 {
     public string ConnectionString { get; } = GetConnectionString();
     public RegionEndpoint Region { get; } = GetRegion();

@@ -13,14 +13,9 @@ builder.Configuration.AddCommandLine(args);
 builder.Services.AddControllers();
 
 builder.Services
-    .AddEnvironmentSpecificServices(builder.Environment)
+    .AddEnvironmentSpecificServices(builder.Environment.IsDevelopment())
     .AddLogging()
-    .AddScoped<IDbConnection>(p =>
-    {
-        var provider = p.GetRequiredService<IConfigManager>();
-        
-        return new NpgsqlConnection(provider.ConnectionString);
-    })
+    .AddScoped<IDbConnection>(CreateConnection)
     .AddScoped<IFirmService, PostgresFirmService>()
     .AddScoped<IPersonService, PostgresPersonService>()
     .AddEndpointsApiExplorer()
@@ -50,3 +45,11 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+NpgsqlConnection CreateConnection(IServiceProvider serviceProvider)
+{
+    var configuration = serviceProvider.GetRequiredService<IEnvironment>();
+
+    return new NpgsqlConnection(configuration.ConnectionString);
+}

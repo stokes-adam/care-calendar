@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography;
-using System.Text;
-using Amazon;
+﻿using System.Text;
 using Amazon.KeyManagementService;
 using Amazon.KeyManagementService.Model;
 using Microsoft.Extensions.Logging;
@@ -14,10 +12,10 @@ public class AwsEncryption : IEncryption
     private readonly AmazonKeyManagementServiceClient _kmsClient;
     private readonly string _kmsKeyId;
 
-    public AwsEncryption(ILogger<AwsEncryption> logger)
+    public AwsEncryption(ILogger<AwsEncryption> logger, IEnvironment environment)
     {
         _logger = logger;
-        _kmsClient = new AmazonKeyManagementServiceClient(GetRegion());
+        _kmsClient = new AmazonKeyManagementServiceClient(environment.Region);
         _kmsKeyId = Environment.GetEnvironmentVariable("EncryptionKeyId")
                           ?? throw new Exception("EncryptionKeyId not set");
     }
@@ -65,15 +63,5 @@ public class AwsEncryption : IEncryption
             _logger.LogError(e, "Failed to decrypt value");
             throw;
         }
-    }
-
-    private static RegionEndpoint GetRegion()
-    {
-        var regionString = Environment.GetEnvironmentVariable("Region")
-                           ?? throw new Exception("Region not set");
-
-        var region = RegionEndpoint.GetBySystemName(regionString);
-
-        return region;
     }
 }

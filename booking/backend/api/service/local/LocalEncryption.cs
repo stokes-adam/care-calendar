@@ -2,7 +2,7 @@
 
 namespace service.postgres;
 
-public class NoEncryption : IEncryption
+public class LocalEncryption : IEncryption
 {
     public Task<string> Encrypt(string value)
     {

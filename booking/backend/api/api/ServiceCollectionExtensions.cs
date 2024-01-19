@@ -1,23 +1,22 @@
 ﻿using model.interfaces;
 using service;
-using service.aws;
 using service.postgres;
 
 namespace api;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddEnvironmentSpecificServices(this IServiceCollection services, IWebHostEnvironment environment)
+    public static IServiceCollection AddEnvironmentSpecificServices(this IServiceCollection services, bool isDevelop)
     {
-        if (environment.IsDevelopment())
+        if (isDevelop)
         {
-            services.AddSingleton<IEncryption, NoEncryption>();
-            services.AddSingleton<IConfigManager, LocalConfigManager>();
+            services.AddSingleton<IEncryption, LocalEncryption>();
+            services.AddSingleton<IEnvironment, LocalEnvironment>();
         }
         else
         {
             services.AddSingleton<IEncryption, AwsEncryption>();
-            services.AddSingleton<IConfigManager, AwsConfigManager>();
+            services.AddSingleton<IEnvironment, AwsEnvironment>();
         }
         
         return services;
