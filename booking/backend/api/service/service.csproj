@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,6 +15,7 @@
       <PackageReference Include="AWSSDK.KeyManagementService" Version="3.7.103.6" />
       <PackageReference Include="AWSSDK.SimpleSystemsManagement" Version="3.7.104.56" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0-preview.4.23259.5" />
+      <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0-preview.2.24128.5" />
       <PackageReference Include="Npgsql" Version="8.0.0-preview.4" />
     </ItemGroup>
 
