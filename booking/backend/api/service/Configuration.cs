@@ -5,18 +5,14 @@ using model.interfaces;
 
 namespace service;
 
-public class Configuration : IConfiguration
+public class Configuration
 {
-    public string ConnectionString { get; }
-    public RegionEndpoint Region { get; }
-    
-    public Configuration()
-    {
-        ConnectionString = GetConnectionString();
-        Region = GetRegion();
-    }
-    
-    private RegionEndpoint GetRegion()
+    public RegionEndpoint Region { get; } = GetRegion();
+    public string ConnectionString { get; } = GetConnectionString();
+    public string EncryptionKeyId = Environment.GetEnvironmentVariable("EncryptionKeyId")
+                                    ?? throw new Exception("EncryptionKeyId not set");
+
+    private static RegionEndpoint GetRegion()
     {
         var regionString = Environment.GetEnvironmentVariable("Region")
                            ?? throw new Exception("Region not set");
@@ -26,7 +22,7 @@ public class Configuration : IConfiguration
         return region;
     }
 
-    private string GetConnectionString()
+    private static string GetConnectionString()
     {
         var service = new AmazonSimpleSystemsManagementClient();
         

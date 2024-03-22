@@ -1,25 +1,22 @@
+using Amazon.KeyManagementService;
 using api;
 using model.interfaces;
 using service;
 using service.postgres;
-using IConfiguration = model.interfaces.IConfiguration;
-
-Console.WriteLine("Starting");
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddCommandLine(args);
+builder.Configuration
+    .AddCommandLine(args)
+    .AddEnvironmentVariables();
 
 builder.Services.AddControllers();
 
 builder.Services
     .AddLogging()
-    .AddSingleton<IConfiguration, Configuration>()
-    .AddSingleton<Encryption>()
-    .AddSingleton<IFirmQueryService, PostgresFirmQueryService>()
-    .AddSingleton<IFirmCommandService, PostgresFirmCommandService>()
-    .AddSingleton<IPersonQueryService, PostgresPersonQueryService>()
-    .AddSingleton<IPersonCommandService, PostgresPersonCommandService>()
+    .AddAwsServices()
+    .AddPostgresServices()
+    .AddSingleton<AwsEncryption>()
     .AddEndpointsApiExplorer()
     .AddSwaggerGen();
 
@@ -32,7 +29,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(builder => builder
+app.UseCors(corsPolicyBuilder => corsPolicyBuilder
     .WithOrigins(
         "http://localhost:3000",
         "https://carecalendar.xyz"
